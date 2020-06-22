@@ -1,4 +1,6 @@
-" Compile function
+
+" ######### CompileFunctions ##########
+
 noremap r :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
@@ -42,9 +44,7 @@ func! CompileRunGcc()
 endfunc
 
 
-" ===
-" === Auto load for first time uses
-" ===
+" ######### Auto load in first time ##########
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
 	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
 				\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -146,7 +146,6 @@ map sV <C-w>t<C-w>H
 map sH <C-w>t<C-w>K
 
 map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
-"imap 、、\\<CR>
 
 if expand('%:t:e') == 'md'
   imap .. <Esc>I> <Esc>A
@@ -157,15 +156,6 @@ if expand('%:t:e') == 'md'
   
   imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
 endif
-"imap j > 
-
-"imap 。。 <Esc>I> <Esc>A
-"imap ,. <Esc>I* <Esc>A
-"imap ,b <Esc>a****<++><Esc>hhhhhi
-"imap ,l <Esc>a**<++><Esc>hhhhi
-"imap ，， <Esc>o
-"
-"imap ,mm <Esc>I* <Esc>A
 
 
 noremap <LEADER><CR> :nohlsearch<CR>
@@ -190,68 +180,98 @@ map tx :r !figlet
 map Tv :e ~/.config/nvim/init.vim<CR>
 map Tm :e C:/Users/吴贵晨/Desktop/学习资料/MarkDown笔记/DS_01.md<CR>
 
+"===================== Plugs ============================
 call plug#begin('~/.vim/plugged')
 
 Plug 'mhinz/vim-startify'
 Plug 'vim-airline/vim-airline'
-"Plug 'connorholyday/vim-snazzy'
-" File navigation
+
+
+"=======================
+"### File navigation ###
+"=======================
+
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Taglist
+
+"================
+"### Tag list ###
+"================
+
 Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
 
-" Error checking
+
+"===================
+"### Error check ###
+"===================
+
 Plug 'w0rp/ale'
 
-" Auto Complete
+
+"====================
+"### autocomplete ###
+"====================
+
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Undo Tree
+
+
+"=================
+"### Undo tree ###
+"=================
+
 Plug 'mbbill/undotree/'
 
-" Other visual enhancement
+
+"================================
+"### Other visual enhancemnet ###
+"================================
+
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'itchyny/vim-cursorword'
 
-" Git
+
+"===========
+"### git ###
+"===========
+
 Plug 'rhysd/conflict-marker.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 Plug 'gisphm/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
 
-" HTML, CSS, JavaScript, PHP, JSON, etc.
-"Plug 'elzr/vim-json'
-"Plug 'hail2u/vim-css3-syntax'
-"Plug 'spf13/PIV', { 'for' :['php', 'vim-plug'] }
-"Plug 'gko/vim-coloresque', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
-"Plug 'pangloss/vim-javascript', { 'for' :['javascript', 'vim-plug'] }
-"Plug 'mattn/emmet-vim'
 
-" Python
-"Plug 'vim-scripts/indentpython.vim'
-"Plug 'honza/vim-snippets',{'for':'python'}
-"Plug 'Yggdroot/indentLine',{'for':'python'}
-"Plug 'jiangmiao/auto-pairs',{'for':'python'}
-"Plug 'vim-scripts/indentpython.vim',{'for':'python'}
-"Plug 'luochen1990/rainbow',{'for':'python'}
-"Plug 'ycm-core/YouCompleteMe',{'for':'python'}
-" Markdown
+"=============================================
+"### HTML, CSS, JavaScript, PHP, JSON, etc ###
+"=============================================
+
+
+"==============
+"### Python ###
+"==============
+
+
+
+"================
+"### Markdown ###
+"================
+
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
-"Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
-"Plug 'vimwiki/vimwiki'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-"Plug 'sillybun/zyt-snippet'
-"Plug 'mzlogin/vim-markdown-toc'
-"安装插件
-"Plug 'godlygeek/tabular' "必要插件，安装在vim-markdown前面
-"Plug 'plasticboy/vim-markdown'
 
-" Bookmarks
+
+"=================
+"### Bookmarks ###
+"=================
+
 Plug 'kshenoy/vim-signature'
 
-" Other useful utilities
+
+"==============================
+"### Other useful utilities ###
+"==============================
+
 Plug 'terryma/vim-multiple-cursors'
 "Plug 'junegunn/goyo.vim' " distraction free writing mode
 Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
@@ -260,24 +280,22 @@ Plug 'plasticboy/vim-markdown'
 Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or type i) i] i} ip
 Plug 'scrooloose/nerdcommenter' " in <space>cc to comment a line
 
-" Dependencies
-"Plug 'MarcWeber/vim-addon-mw-utils'
-"Plug 'kana/vim-textobj-user'
-"Plug 'fadein/vim-FIGlet'
-"Plug 'godlygeek/tabular'
-"Plug 'SirVer/ultisnips',{'for':'markdown'}
+
+"====================
+"### Dependencies ###
+"====================
+
 Plug 'mzlogin/vim-markdown-toc'
-"Plug 'iamcco/markdown-preview.nvim'
 Plug 'ferrine/md-img-paste.vim'
-"Plug 'mzlogin/vim-markdown-toc'
 Plug '907th/vim-auto-save'
-"Plug 'scrooloose/nerdtree'
-"Plug 'mhinz/vim-startify'
 
-" A Vim Plugin for Lively Previewing LaTeX PDF Output
-Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
-Plug 'lervag/vimtex'
+"===========================================================
+"### A Vim Plugin for Lively Previewing LaTeX PDF Output ###
+"===========================================================
+
+"Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+"Plug 'lervag/vimtex'
 
 call plug#end()
 
@@ -288,14 +306,14 @@ let g:auto_save_events = ["TextChangedI", "TextChanged"]
 " autocmd TextChanged,TextChangedI <buffer> silent write
 
 "使vimtex默认xelatex为编译器
-let g:tex_flavor='latex'
-let g:vimtex_view_method='zathura'
-if has('nvim')
-  let g:vimtex_compiler_progname='nvr'
-endif
-let g:vimtex_quickfix_mode=0
-set conceallevel=1
-let g:tex_conceal='abdmg'
+"let g:tex_flavor='latex'
+"let g:vimtex_view_method='zathura'
+"if has('nvim')
+"  let g:vimtex_compiler_progname='nvr'
+"endif
+"let g:vimtex_quickfix_mode=0
+"set conceallevel=1
+"let g:tex_conceal='abdmg'
 
 
 
@@ -308,95 +326,35 @@ let g:mkdp_delay_start_browser = 800
 
 let g:vim_markdown_math = 1
 
-"设置tab键为触发键
+"UltiSnips 设置tab键为触发键
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-"let g:UltiSnipsSnippetDirectories=["~/.vim/plugged/ultisnips"]
+
 "设置打开配置文件时为垂直打开
 let g:UltiSnipsEditSplit="vertical"
 
-" set to 1, nvim will open the preview window after entering the markdown buffer
-" default: 0
+" ===
+" === MarkdownPreview
+" ===
 let g:mkdp_auto_start = 0
-
-" set to 1, the nvim will auto close current preview window when change
-" from markdown buffer to another buffer
-" default: 1
 let g:mkdp_auto_close = 1
-
-" set to 1, the vim will refresh markdown when save the buffer or
-" leave from insert mode, default 0 is auto refresh markdown as you edit or
-" move the cursor
-" default: 0
 let g:mkdp_refresh_slow = 0
-
-" set to 1, the MarkdownPreview command can be use for all files,
-" by default it can be use in markdown file
-" default: 0
 let g:mkdp_command_for_global = 0
-
-" set to 1, preview server available to others in your network
-" by default, the server listens on localhost (127.0.0.1)
-" default: 0
 let g:mkdp_open_to_the_world = 0
-
-" use custom IP to open preview page
-" useful when you work in remote vim and preview on local browser
-" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/9
-" default empty
 let g:mkdp_open_ip = ''
-
-" specify browser to open preview page
-" default: ''
-let g:mkdp_browser = ''
-
-" set to 1, echo preview page url in command line when open preview page
-" default is 0
 let g:mkdp_echo_preview_url = 0
-
-" a custom vim function name to open preview page
-" this function will receive url as param
-" default is empty
 let g:mkdp_browserfunc = ''
-
-" options for markdown render
-" mkit: markdown-it options for render
-" katex: katex options for math
-" uml: markdown-it-plantuml options
-" maid: mermaid options
-" disable_sync_scroll: if disable sync scroll, default 0
-" sync_scroll_type: 'middle', 'top' or 'relative', default value is 'middle'
-"   middle: mean the cursor position alway show at the middle of the preview page
-"   top: mean the vim top viewport alway show at the top of the preview page
-"   relative: mean the cursor position alway show at the relative positon of the preview page
-" hide_yaml_meta: if hide yaml metadata, default is 1
-" sequence_diagrams: js-sequence-diagrams options
-" content_editable: if enable content editable for preview page, default: v:false
 let g:mkdp_preview_options = {
-    \ 'mkit': {},
-    \ 'katex': {},
-    \ 'uml': {},
-    \ 'maid': {},
-    \ 'disable_sync_scroll': 0,
-    \ 'sync_scroll_type': 'middle',
-    \ 'hide_yaml_meta': 1,
-    \ 'sequence_diagrams': {},
-    \ 'flowchart_diagrams': {},
-    \ 'content_editable': v:false
-    \ }
-
-" use a custom markdown style must be absolute path
-" like '/Users/username/markdown.css' or expand('~/markdown.css')
+			\ 'mkit': {},
+			\ 'katex': {},
+			\ 'uml': {},
+			\ 'maid': {},
+			\ 'disable_sync_scroll': 0,
+			\ 'sync_scroll_type': 'middle',
+			\ 'hide_yaml_meta': 1
+			\ }
 let g:mkdp_markdown_css = ''
-
-" use a custom highlight style must absolute path
-" like '/Users/username/highlight.css' or expand('~/highlight.css')
 let g:mkdp_highlight_css = ''
-
-" use a custom port to start server or random for empty
 let g:mkdp_port = ''
-
-" preview page title
-" ${name} will be replace with the file name
 let g:mkdp_page_title = '「${name}」'
