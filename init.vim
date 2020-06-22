@@ -178,7 +178,6 @@ map tl :+tabnext<CR>
 map tx :r !figlet 
 
 map Tv :e ~/.config/nvim/init.vim<CR>
-map Tm :e C:/Users/吴贵晨/Desktop/学习资料/MarkDown笔记/DS_01.md<CR>
 
 "===================== Plugs ============================
 call plug#begin('~/.vim/plugged')
