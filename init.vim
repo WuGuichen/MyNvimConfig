@@ -338,9 +338,8 @@ let g:UltiSnipsJumpBackwardTrigger="bb"
 "设置打开配置文件时为垂直打开
 let g:UltiSnipsEditSplit="vertical"
 
-" ===
-" === MarkdownPreview
-" ===
+
+" ######### MarkdownPreview Setting ##########
 let g:mkdp_auto_start = 0
 let g:mkdp_auto_close = 1
 let g:mkdp_refresh_slow = 0
