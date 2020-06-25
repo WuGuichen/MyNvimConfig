@@ -1,7 +1,7 @@
 
 " ######### CompileFunctions ##########
 
-noremap r :call CompileRunGcc()<CR>
+noremap sr :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
