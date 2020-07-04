@@ -103,13 +103,29 @@ autocmd InsertLeave * call Fcitx2en()
 autocmd InsertEnter * call Fcitx2zh()
 "##### auto fcitx end ######
 
+" Give more space for displaying messages.
+set cmdheight=2
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
 set fileencoding=utf-8
 
 set mouse=a
 set encoding=utf-8
 let &t_ut=''
 set expandtab
-set tabstop=2
+set tabstop=4
 set shiftwidth=2
 set softtabstop=2
 set list 
@@ -148,6 +164,8 @@ map sH <C-w>t<C-w>K
 
 map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
 
+
+
 if expand('%:t:e') == 'md'
   imap .. <Esc>I> <Esc>A
   imap ,. <Esc>I* <Esc>A
@@ -179,6 +197,42 @@ map tl :+tabnext<CR>
 map tx :r !figlet 
 
 map Tv :e ~/.config/nvim/init.vim<CR>
+
+" 映射全选+复制 ctrl+a
+imap <C-a> <Esc>ggVG
+nmap <C-a> ggVG
+vmap <C-a> ggG
+map <F12> <nop>
+
+"将选中文本块复制到系统剪贴板
+vnoremap <LEADER>y "+y
+
+"将系统剪贴板内容粘贴到vim
+nmap <LEADER>p "+p"
+
+
+"共享剪贴板  
+set clipboard+=unnamed
+
+"自动补全
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+":inoremap { {<CR>}<ESC>O
+":inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap " ""<ESC>i
+:inoremap ' ''<ESC>i
+function! ClosePair(char)
+    if getline('.')[col('.') - 1] == a:char
+        return "\<Right>"
+    else
+        return a:char
+    endif
+endfunction
+filetype plugin indent on 
+"打开文件类型检测, 加了这句才可以用智能补全
+set completeopt=longest,menu
 
 "===================== Plugs ============================
 call plug#begin('~/.vim/plugged')
@@ -296,28 +350,36 @@ Plug '907th/vim-auto-save'
 "### A Vim Plugin for Lively Previewing LaTeX PDF Output ###
 "===========================================================
 
-"Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-"Plug 'lervag/vimtex'
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+Plug 'lervag/vimtex'
 
 call plug#end()
 
-let g:markdown_preview_sync_firefox_path = "C:\Program Files\Mozilla Firefox"
+"let g:markdown_preview_sync_firefox_path = "C:\Program Files\Mozilla Firefox"
 
 let g:auto_save = 1
 let g:auto_save_events = ["TextChangedI", "TextChanged"]
 " autocmd TextChanged,TextChangedI <buffer> silent write
 
-"使vimtex默认xelatex为编译器
-"let g:tex_flavor='latex'
+" ######### LaTeX ##########
+
+autocmd filetype tex setl updatetime=1000
+let g:livepreview_previewer = 'zathura'
+autocmd filetype tex :LLPStartPreview
+nmap <F6> :LLPStartPreview<CR>
+imap <F6> <ESC>:LLPStartPreview<CR>
+
+let g:livepreview_engine = 'xelatex'
+let g:vimtex_compiler_progname = 'nvr'
+let g:tex_flavor='latex'
 "let g:vimtex_view_method='zathura'
-"if has('nvim')
-"  let g:vimtex_compiler_progname='nvr'
-"endif
-"let g:vimtex_quickfix_mode=0
-"set conceallevel=1
-"let g:tex_conceal='abdmg'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 
 
+
+" ######### other ##########
 
 let g:python_slow_sync = 0
 "let g:coc_disable_startup_warning = 1
@@ -329,10 +391,9 @@ let g:mkdp_delay_start_browser = 800
 let g:vim_markdown_math = 1
 
 "UltiSnips 设置tab键为触发键
-let g:UltiSnipsExpandTrigger="nn"
-let g:UltiSnipsJumpForwardTrigger="nn"
-let g:UltiSnipsJumpBackwardTrigger="bb"
-
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-J>"
 
 
 "设置打开配置文件时为垂直打开
@@ -410,8 +471,11 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+
+
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
+
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
