@@ -115,9 +115,9 @@ snippet ilc "Inline Code" i
 \`$1\`$0
 endsnippet
 
-snippet cbl "Codeblock" b
-\`\`\`
-$1
+snippet cbl "Codeblock" bA
+\`\`\`${1:c++}
+$0
 \`\`\`
 <++>
 endsnippet
@@ -942,7 +942,7 @@ snippet club "spade"
 $\clubsuit$
 endsnippet
 
-snippet lrn "left( right)" iAw
+snippet lrn "left( right)" iA
 ($0)<++>
 endsnippet
 
@@ -996,5 +996,6 @@ snippet Box "Box"
 `!p snip.rv = '└'+ '—'* (len(t[ 1]) + 2) + '┘'`
 $0
 endsnippet
+
 
 # vim:
