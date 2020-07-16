@@ -1,3 +1,8 @@
+" ######### For MarkdownPreview ##########
+
+" sudo npm install tslib neovim log4js socket.io msgpack-lite
+
+
 " ######### CompileFunctions ##########
 
 noremap sr :call CompileRunGcc()<CR>
@@ -56,7 +61,6 @@ set wrap
 set cursorline
 set number
 set modifiable
-
 set hlsearch
 exec "nohlsearch"
 set incsearch
@@ -147,8 +151,6 @@ set tw=0
 set foldmethod=indent
 
 
-
-
 map s <nop>
 map sq :q!<CR>
 map S :w<CR>
@@ -167,14 +169,33 @@ map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
 " 寻找两个相等的单词
 map <LEADER>fd /\(\<\w\+\>\)\_s*\1
 
+"================= 根据文件类型映射按键 =================
 if expand('%:t:e') == 'md'
   imap ,. <Esc>I* <Esc>A
   imap ,b <Esc>a****<Esc>hi
   imap ,l <Esc>a**<Esc>i
-  imap ，， <Esc>o
   imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
+  " xdot
+  imap ,, <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>a
+  imap ，， <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>a
+  nmap ,, :!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>
+
+  " map sp :call PlayAndPause()<CR>
+  " func! PlayAndPause()
+    " exec "!time xdotool key Alt+Tab sleep 0.2 mousemove 1100 540 click 1 key Alt+Tab"
+  " endfunc
+
+  """""
 endif
 
+if expand('%:t:e') == 'cpp'
+
+    imap ,, <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>a
+    imap ，， <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>a
+    nmap ,, :!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>
+endif
+
+" =================== end =========================
 
 noremap <LEADER><CR> :nohlsearch<CR>
 " 分屏移动
@@ -598,9 +619,9 @@ au Syntax * RainbowParenthesesLoadBraces
 
 " ######### auto_save ##########
 
-
+"自动保存
 let g:auto_save = 1
-let g:auto_save_events = ["TextChangedI", "TextChanged"]
+let g:auto_save_events = ["InsertLeave", "TextChanged", "TextChangedI", "CursorHoldI", "CompleteDone"]
 " autocmd TextChanged,TextChangedI <buffer> silent write
 
 " ######### LaTeX ##########
