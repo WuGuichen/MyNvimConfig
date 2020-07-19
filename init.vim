@@ -379,9 +379,9 @@ if expand('%:t:e') == 'md'
   imap ,l <Esc>a**<Esc>i
   imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
   " xdot
-  imap ,, <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>a
-  imap ，， <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>a
-  nmap ,, :!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>
+  imap ,, <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key sleep 0.1 Alt+Tab<CR><CR>a
+  imap ，， <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key sleep 0.1 Alt+Tab<CR><CR>a
+  nmap ,, :!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key sleep 0.1 Alt+Tab<CR><CR>
 
   " map sp :call PlayAndPause()<CR>
   " func! PlayAndPause()
@@ -594,6 +594,13 @@ Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 "Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'neoclide/coc-jedi', {'do': 'yarn install'}
 
+"===================
+"### auto format ###
+"===================
+
+Plug 'Chiel92/vim-autoformat'
+
+
 "====================
 "### auto comment ###
 "====================
@@ -668,8 +675,9 @@ Plug 'kshenoy/vim-signature'
 "### debugger ###
 "================
 
-Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-python --enable-go'}
-
+Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-python'}
+" Plug 'skywind3000/asynctasks.vim'
+" Plug 'skywind3000/asyncrun.vim'
 
 "==============================
 "### Other useful utilities ###
@@ -1006,8 +1014,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+" xmap <leader>f  <Plug>(coc-format-selected)
+" nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -1078,7 +1086,11 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " ######### vimspector ##########
 
-let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+nmap <F1> :VimspectorReset<CR>
+
+
+let g:vimspector_enable_mappings = 'HUMAN'
+nmap <F2> :call vimspector#StepInto()<CR>
 function! s:read_template_into_buffer(template)
     " has to be a function to avoid the extra space fzf#run insers otherwise
     execute '0r ~/.config/nvim/sample_vimspector_json/'.a:template
@@ -1094,3 +1106,14 @@ sign define vimspectorBPDisabled text=☞ texthl=Normal
 sign define vimspectorPC text=🔶 texthl=SpellBad
 
 
+
+
+" ######### Async setting ##########
+
+" let g:asyncrun_open = 6
+
+
+
+" ######### Auto Format ##########
+
+noremap <F3> :Autoformat<CR>
