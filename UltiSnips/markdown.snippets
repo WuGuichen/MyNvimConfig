@@ -963,7 +963,7 @@ snippet lrl "left| right|" iAw
 | $0|<++>
 endsnippet
 
-snippet '(?<!\\)([0-9])([0-9])tb' "definele" r
+snippet '(?<!\\)([0-9])([0-9])tb' "definele" rA
 $1`!p 
 x=match.group(1)
 y=match.group(2)
@@ -996,6 +996,4 @@ snippet Box "Box"
 `!p snip.rv = '└'+ '—'* (len(t[ 1]) + 2) + '┘'`
 $0
 endsnippet
-
-
 # vim:

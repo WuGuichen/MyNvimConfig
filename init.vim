@@ -189,8 +189,8 @@ func! Run()
             else
                 set splitbelow
                 :sp
-                :res -8
-                exec "term ./%<"
+                :res -9
+                exec"term time ./%<"
             endif
         endif
         redraw!
@@ -222,7 +222,7 @@ func! CompileRunGcc()
     elseif &filetype == 'python'
         set splitbelow
         :sp
-        :term python3 %
+        exec "term time python3 %"
     elseif &filetype == 'html'
         silent! exec "!".g:mkdp_browser." % &"
     elseif &filetype == 'markdown'
@@ -245,6 +245,21 @@ func! CompileRunGcc()
 endfunc
 
 
+" ######### 大括号自动换行 ##########
+
+" 大括号自动分行, C/C++下的自动命令, 添加到 .vimrc
+autocmd BufWritePre,BufRead *.c :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
+autocmd BufWritePre,BufRead *.cpp :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
+
+function BracketsEnter(char)
+    if getline('.')[col('.')-1] == a:char
+        return "\<Enter>\<Tab>\<Esc>mpa\<Enter>\<Esc>`pa" 
+    else
+        return "\<Enter>"
+    endif
+endf
+
+
 " ######### Auto load in first time ##########
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
     silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
@@ -258,6 +273,7 @@ set norelativenumber
 set wrap
 set cursorline
 set number
+set relativenumber
 set modifiable
 set hlsearch
 exec "nohlsearch"
@@ -375,19 +391,25 @@ map <LEADER>fd /\(\<\w\+\>\)\_s*\1
 "================= 根据文件类型映射按键 =================
 if expand('%:t:e') == 'md'
   imap ,. <Esc>I* <Esc>A
-  imap ,b <Esc>a****<Esc>hi
+  nmap ,b <Esc>Bi**<Esc>Ea**<Esc>
+  imap ,b **<Esc>hi**
   imap ,l <Esc>a**<Esc>i
   imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
   " xdot
-  imap ,, <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key sleep 0.1 Alt+Tab<CR><CR>a
-  imap ，， <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key sleep 0.1 Alt+Tab<CR><CR>a
-  nmap ,, :!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key sleep 0.1 Alt+Tab<CR><CR>
+  " imap ,, <Esc>:call PlayAndPause()<CR>
+  " imap ,, :call PlayAndPause()<CR>
+  imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+  imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+
+  nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
 
   " map sp :call PlayAndPause()<CR>
   " func! PlayAndPause()
-    " exec "!time xdotool key Alt+Tab sleep 0.2 mousemove 1100 540 click 1 key Alt+Tab"
+  "   exec "! xdotool key Alt+Tab"
+  "   exec "! xdotool mousemove 1100 540 click 1"
+  "   exec "! xdotool key Alt+Tab"
   " endfunc
-
+  "
   """""
 endif
 
@@ -425,7 +447,7 @@ map Tv :e ~/.config/nvim/init.vim<CR>
 imap <C-a> <Esc>ggVG
 nmap <C-a> ggVG
 vmap <C-a> ggG
-map <F12> <nop>
+" map <F12> <nop>
 
 "将选中文本块复制到系统剪贴板
 vnoremap <LEADER>y "+y
@@ -657,13 +679,15 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'mzlogin/vim-markdown-toc'
 
 "=============
 "### theme ###
 "=============
 
-Plug 'crusoexia/vim-monokai'
-Plug 'connorholyday/vim-snazzy'
+" Plug 'crusoexia/vim-monokai'
+" Plug 'connorholyday/vim-snazzy'
+" Plug 'tyrannicaltoucan/vim-quantum'
 
 "=================
 "### Bookmarks ###
@@ -726,14 +750,13 @@ call plug#end()
 
 " ######### theme ##########
 
-"colo monokai
-"colorscheme snazzy
-"colorscheme onedark
-"let g:SnazzyTransparent = 1
-"let g:lightline = {
-"\ 'colorscheme': 'snazzy',
-"\ }
-
+" set background=dark
+" set termguicolors
+" colorscheme quantum
+" let g:quantum_black=1
+" colorscheme quantum
+" let g:quantum_italics=1
+" let g:airline_theme='quantum'
 
 " ######### undotree ##########
 
@@ -893,10 +916,13 @@ let g:mkdp_delay_start_browser = 800
 
 let g:vim_markdown_math = 1
 
+
 "UltiSnips 设置tab键为触发键
+
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
 
 
 "设置打开配置文件时为垂直打开
@@ -929,6 +955,26 @@ let g:mkdp_page_title = '「${name}」'
 
 " ######### Ruby ##########
 let g:ruby_host_prog = '/home/wgc/.gem/ruby/2.7.0/bin/neovim-ruby-host'
+
+
+
+" ######### coc-snippets ##########
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
 
 
 " ######### coc setting ##########
@@ -1091,6 +1137,7 @@ nmap <F1> :VimspectorReset<CR>
 
 let g:vimspector_enable_mappings = 'HUMAN'
 nmap <F2> :call vimspector#StepInto()<CR>
+nmap <F3> :call vimspector#StepOut()<CR>
 function! s:read_template_into_buffer(template)
     " has to be a function to avoid the extra space fzf#run insers otherwise
     execute '0r ~/.config/nvim/sample_vimspector_json/'.a:template
@@ -1116,4 +1163,4 @@ sign define vimspectorPC text=🔶 texthl=SpellBad
 
 " ######### Auto Format ##########
 
-noremap <F3> :Autoformat<CR>
+noremap <leader>f :Autoformat<CR>
