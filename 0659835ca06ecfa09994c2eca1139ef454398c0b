@@ -1,0 +1,107 @@
+[33mcommit e4bedb3f30acd5fefffa66eb2f8912e33e6cc3c8[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: chubby <577024128@qq.com>
+Date:   Wed Jul 29 00:55:12 2020 +0800
+
+    debuger, asynctask, xdotool,etc
+
+[33mcommit 0659835ca06ecfa09994c2eca1139ef454398c0b[m
+Author: chubby <577024128@qq.com>
+Date:   Thu Jul 23 12:42:45 2020 +0800
+
+    add some funcs
+
+[33mcommit ef7251e26230275861cc6398f77ec081441f9b72[m
+Author: chubby <577024128@qq.com>
+Date:   Sun Jul 19 22:05:08 2020 +0800
+
+    auto format
+
+[33mcommit dc8947bd07bdc8f74242e71c7bbd718db2928be7[m
+Author: chubby <577024128@qq.com>
+Date:   Fri Jul 17 00:24:18 2020 +0800
+
+    新的C++ complie
+
+[33mcommit 4cb8d89e96cb66bc611d113d65b4d8f95ebd50e6[m
+Author: chubby <577024128@qq.com>
+Date:   Thu Jul 16 19:59:16 2020 +0800
+
+    添加了功能
+
+[33mcommit 5b55ffce86f8eaeb96cdc2dc74d8c668731f0dcc[m
+Author: chubby <577024128@qq.com>
+Date:   Tue Jul 14 21:06:16 2020 +0800
+
+    debug added
+
+[33mcommit f9834651fb817754c4e4af00a21c448afbd01c5f[m
+Author: chubby <577024128@qq.com>
+Date:   Tue Jul 14 17:22:39 2020 +0800
+
+    大改
+
+[33mcommit b6f5b1929462d335dc010541a439c0778d6fd262[m
+Author: chubby <577024128@qq.com>
+Date:   Sat Jul 4 22:07:53 2020 +0800
+
+    增加nvim配置
+
+[33mcommit 61935922f1a57938bbc70d1e59ffd724e66195ba[m
+Author: chubby <577024128@qq.com>
+Date:   Thu Jun 25 13:46:04 2020 +0800
+
+    fixed
+
+[33mcommit 8681fc15195d5a8a2b96e52647d340f35420ce8f[m
+Author: chubby <577024128@qq.com>
+Date:   Thu Jun 25 11:20:54 2020 +0800
+
+    //
+
+[33mcommit bba7464296e83851e6623ece38765d92ff4a3224[m
+Author: chubby <577024128@qq.com>
+Date:   Tue Jun 23 12:15:05 2020 +0800
+
+    配置Python
+
+[33mcommit 5097f73514b14ed283ba862106d6e8ec3b70745f[m
+Author: chubby <577024128@qq.com>
+Date:   Mon Jun 22 22:47:24 2020 +0800
+
+    none
+
+[33mcommit f7914fef9f82adc47ea5ee241b66351fad2b324a[m
+Author: chubby <577024128@qq.com>
+Date:   Mon Jun 22 22:42:34 2020 +0800
+
+    Some decorations
+
+[33mcommit 2347de2515b171820f80cf5a5514132c8e32c67f[m
+Author: chubby <577024128@qq.com>
+Date:   Mon Jun 22 16:26:39 2020 +0800
+
+    add complie functions
+
+[33mcommit 2a83f99b6d9cc1f077d5542ff6b1d7679266422e[m
+Author: chubby <577024128@qq.com>
+Date:   Mon Jun 22 16:22:45 2020 +0800
+
+    add something
+
+[33mcommit 2a6b3ea7be23ea2ffe54ad45573fc5a92a19d8ee[m
+Author: chubby <577024128@qq.com>
+Date:   Mon Jun 22 15:53:01 2020 +0800
+
+    ignore
+
+[33mcommit 3159990bcf105e20247d556f134351d5adaf8f34[m
+Author: chubby <577024128@qq.com>
+Date:   Mon Jun 22 15:50:55 2020 +0800
+
+    read
+
+[33mcommit 5fe23c09acc63ad6cb42f994f54823d823d7b1b4[m
+Author: chubby <577024128@qq.com>
+Date:   Mon Jun 22 15:41:14 2020 +0800
+
+    My vim config

@@ -2,247 +2,6 @@
 
 " sudo npm install tslib neovim log4js socket.io msgpack-lite
 
-"------------------------------------------------------------------------------
-"  < 判断操作系统是否是 Windows 还是 Linux >
-"------------------------------------------------------------------------------
-if(has("win32") || has("win64") || has("win95") || has("win16"))
-    let g:iswindows = 1
-else
-    let g:iswindows = 0
-endif
- 
-"------------------------------------------------------------------------------
-"  < 判断是终端还是 Gvim >
-"------------------------------------------------------------------------------
-if has("gui_running")
-    let g:isGUI = 1
-else
-    let g:isGUI = 0
-endif
- 
-"------------------------------------------------------------------------------
-"  < 编译、连接、运行配置 >
-"------------------------------------------------------------------------------
-" F9 一键保存、编译、连接存并运行
-map sR :call Run()<CR>
-imap sR <ESC>:call Run()<CR>
- 
-" Ctrl + F9 一键保存并编译
-map <c-F9> :call Compile()<CR>
-imap <c-F9> <ESC>:call Compile()<CR>
- 
-" Ctrl + F10 一键保存并连接
-map <c-F10> :call Link()<CR>
-imap <c-F10> <ESC>:call Link()<CR>
- 
-let s:LastShellReturn_C = 0
-let s:LastShellReturn_L = 0
-let s:ShowWarning = 1
-let s:Obj_Extension = '.o'
-let s:Exe_Extension = '.exe'
-let s:Sou_Error = 0
- 
-let s:windows_CFlags = 'gcc\ -fexec-charset=gbk\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-let s:linux_CFlags = 'gcc\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
- 
-let s:windows_CPPFlags = 'g++\ -fexec-charset=gbk\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-let s:linux_CPPFlags = 'g++\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
- 
-func! Compile()
-    exe ":ccl"
-    exe ":update"
-    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
-        let s:Sou_Error = 0
-        let s:LastShellReturn_C = 0
-        let Sou = expand("%:p")
-        let Obj = expand("%:p:r").s:Obj_Extension
-        let Obj_Name = expand("%:p:t:r").s:Obj_Extension
-        let v:statusmsg = ''
-        if !filereadable(Obj) || (filereadable(Obj) && (getftime(Obj) < getftime(Sou)))
-            redraw!
-            if expand("%:e") == "c"
-                if g:iswindows
-                    exe ":setlocal makeprg=".s:windows_CFlags
-                else
-                    exe ":setlocal makeprg=".s:linux_CFlags
-                endif
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
-                if g:iswindows
-                    exe ":setlocal makeprg=".s:windows_CPPFlags
-                else
-                    exe ":setlocal makeprg=".s:linux_CPPFlags
-                endif
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            endif
-            redraw!
-            if v:shell_error != 0
-                let s:LastShellReturn_C = v:shell_error
-            endif
-            if g:iswindows
-                if s:LastShellReturn_C != 0
-                    exe ":bo cope"
-                    echohl WarningMsg | echo " compilation failed"
-                else
-                    if s:ShowWarning
-                        exe ":bo cw"
-                    endif
-                    echohl WarningMsg | echo " compilation successful"
-                endif
-            else
-                if empty(v:statusmsg)
-                    echohl WarningMsg | echo " compilation successful"
-                else
-                    exe ":bo cope"
-                endif
-            endif
-        else
-            echohl WarningMsg | echo ""Obj_Name"is up to date"
-        endif
-    else
-        let s:Sou_Error = 1
-        echohl WarningMsg | echo " please choose the correct source file"
-    endif
-    exe ":setlocal makeprg=make"
-endfunc
- 
-func! Link()
-    call Compile()
-    if s:Sou_Error || s:LastShellReturn_C != 0
-        return
-    endif
-    let s:LastShellReturn_L = 0
-    let Sou = expand("%:p")
-    let Obj = expand("%:p:r").s:Obj_Extension
-    if g:iswindows
-        let Exe = expand("%:p:r").s:Exe_Extension
-        let Exe_Name = expand("%:p:t:r").s:Exe_Extension
-    else
-        let Exe = expand("%:p:r")
-        let Exe_Name = expand("%:p:t:r")
-    endif
-    let v:statusmsg = ''
-    if filereadable(Obj) && (getftime(Obj) >= getftime(Sou))
-        redraw!
-        if !executable(Exe) || (executable(Exe) && getftime(Exe) < getftime(Obj))
-            if expand("%:e") == "c"
-                setlocal makeprg=gcc\ -o\ %<\ %<.o
-                echohl WarningMsg | echo " linking..."
-                silent make
-            elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
-                setlocal makeprg=g++\ -o\ %<\ %<.o
-                echohl WarningMsg | echo " linking..."
-                silent make
-            endif
-            redraw!
-            if v:shell_error != 0
-                let s:LastShellReturn_L = v:shell_error
-            endif
-            if g:iswindows
-                if s:LastShellReturn_L != 0
-                    exe ":bo cope"
-                    echohl WarningMsg | echo " linking failed"
-                else
-                    if s:ShowWarning
-                        exe ":bo cw"
-                    endif
-                    echohl WarningMsg | echo " linking successful"
-                endif
-            else
-                if empty(v:statusmsg)
-                    echohl WarningMsg | echo " linking successful"
-                else
-                    exe ":bo cope"
-                endif
-            endif
-        else
-            echohl WarningMsg | echo ""Exe_Name"is up to date"
-        endif
-    endif
-    setlocal makeprg=make
-endfunc
- 
-func! Run()
-    let s:ShowWarning = 0
-    call Link()
-    let s:ShowWarning = 1
-    if s:Sou_Error || s:LastShellReturn_C != 0 || s:LastShellReturn_L != 0
-        return
-    endif
-    let Sou = expand("%:p")
-    let Obj = expand("%:p:r").s:Obj_Extension
-    if g:iswindows
-        let Exe = expand("%:p:r").s:Exe_Extension
-    else
-        let Exe = expand("%:p:r")
-    endif
-    if executable(Exe) && getftime(Exe) >= getftime(Obj) && getftime(Obj) >= getftime(Sou)
-        redraw!
-        echohl WarningMsg | echo " running..."
-        if g:iswindows
-            exe ":!%<.exe"
-        else
-            if g:isGUI
-                exe ":!gnome-terminal -e ./%<"
-            else
-                set splitbelow
-                :sp
-                :res -9
-                exec"term time ./%<"
-            endif
-        endif
-        redraw!
-        echohl WarningMsg | echo " running finish"
-    endif
-endfunc
-
-" ######### CompileFunctions ##########
-
-noremap sr :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'c'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'cpp'
-        " set splitbelow
-        " exec "!g++ -std=c++11 % -Wall -o %<"
-        " :sp
-        " :res -8
-        " exec "term ./%<"
-        :call Run()
-        normal a
-    elseif &filetype == 'java'
-        exec "!javac %"
-        exec "!time java %<"
-    elseif &filetype == 'sh'
-        :!time bash %
-    elseif &filetype == 'python'
-        set splitbelow
-        :sp
-        exec "term time python3 %"
-    elseif &filetype == 'html'
-        silent! exec "!".g:mkdp_browser." % &"
-    elseif &filetype == 'markdown'
-        exec "MarkdownPreview"
-    elseif &filetype == 'tex'
-        silent! exec "VimtexStop"
-        silent! exec "VimtexCompile"
-    elseif &filetype == 'dart'
-        exec "CocCommand flutter.run -d ".g:flutter_default_device
-        CocCommand flutter.dev.openDevLog
-    elseif &filetype == 'javascript'
-        set splitbelow
-        :sp
-        :term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
-    elseif &filetype == 'go'
-        set splitbelow
-        :sp
-        :term go run .
-    endif
-endfunc
 
 
 " ######### 大括号自动换行 ##########
@@ -258,6 +17,12 @@ function BracketsEnter(char)
         return "\<Enter>"
     endif
 endf
+
+
+" ######### buffers ##########
+
+nmap <leader>l :bnext<CR>;
+nmap <leader>h :bprev<CR>;
 
 
 " ######### Auto load in first time ##########
@@ -424,10 +189,10 @@ endif
 
 noremap <LEADER><CR> :nohlsearch<CR>
 " 分屏移动
-noremap <LEADER>j <C-w>j
-noremap <LEADER>h <C-w>h
-noremap <LEADER>l <C-w>l
-noremap <LEADER>k <C-w>k
+noremap gj <C-w>j
+noremap gh <C-w>h
+noremap gl <C-w>l
+noremap gk <C-w>k
 " noremap <LEADER>t :e ~/.vimrc<CR>
 " 分屏大小
 map <up> :res +3<CR>
@@ -435,7 +200,7 @@ map <down> :res -3<CR>
 map <left> :vertical resize -3<CR>
 map <right> :vertical resize +3<CR>
 
-map ttt :tabe<CR>
+map tt :tabe<CR>
 map th :-tabnext<CR>
 map tl :+tabnext<CR>
 
@@ -463,23 +228,23 @@ set clipboard+=unnamed
 set history=1000
 
 "自动补全
-:inoremap ( ()<ESC>i
-:inoremap ) <c-r>=ClosePair(')')<CR>
-":inoremap { {<CR>}<ESC>O
-":inoremap } <c-r>=ClosePair('}')<CR>
-:inoremap [ []<ESC>i
-:inoremap ] <c-r>=ClosePair(']')<CR>
-":inoremap " ""<ESC>i
-":inoremap ' ''<ESC>i
-function! ClosePair(char)
-    if getline('.')[col('.') - 1] == a:char
-        return "\<Right>"
-    else
-        return a:char
-    endif
-endfunction
-"打开文件类型检测, 加了这句才可以用智能补全
-set completeopt=longest,menu
+" :inoremap ( ()<ESC>i
+" :inoremap ) <c-r>=ClosePair(')')<CR>
+" ":inoremap { {<CR>}<ESC>O
+" ":inoremap } <c-r>=ClosePair('}')<CR>
+" :inoremap [ []<ESC>i
+" :inoremap ] <c-r>=ClosePair(']')<CR>
+" ":inoremap " ""<ESC>i
+" ":inoremap ' ''<ESC>i
+" function! ClosePair(char)
+"     if getline('.')[col('.') - 1] == a:char
+"         return "\<Right>"
+"     else
+"         return a:char
+"     endif
+" endfunction
+" "打开文件类型检测, 加了这句才可以用智能补全
+" set completeopt=longest,menu
 
 
 """""新文件标题""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -487,84 +252,11 @@ set completeopt=longest,menu
 " auto call SetTitle func
 autocmd BufNewFile *.[ch],*.hpp,*.cpp,Makefile,*.mk,*.sh,*.py exec ":call SetTitle()"
  
-" " add comment for cpp
-" func SetComment_ch()
-"     call setline(1,"/*================================================================")
-"     call append(line("."),   "*   Copyright (C) ".strftime("%Y")." * Ltd. All rights reserved.")
-"     call append(line(".")+1, "*   ")
-"     call append(line(".")+2, "*   File name   : ".expand("%:t"))
-"     call append(line(".")+3, "*   Author      : longbin")
-"     call append(line(".")+4, "*   Created date: ".strftime("%F %T"))
-"     call append(line(".")+5, "*   Description : ")
-"     call append(line(".")+6, "*")
-"     call append(line(".")+7, "*===============================================================*/")
-"     call append(line(".")+8, "")
-"     call append(line(".")+9, "")
-" endfunc
-"
-" " add comment for shell,Makefile
-" func SetComment_sh()
-"     call setline(3, "#================================================================")
-"     call setline(4, "#   Copyright (C) ".strftime("%Y")." * Ltd. All rights reserved.")
-"     call setline(5, "#   ")
-"     call setline(6, "#   File name   : ".expand("%:t"))
-"     call setline(7, "#   Author      : longbin")
-"     call setline(8, "#   Created date: ".strftime("%F %T"))
-"     call setline(9, "#   Description : ")
-"     call setline(10, "#")
-"     call setline(11, "#================================================================")
-"     call setline(12, "")
-"     call setline(13, "")
-" endfunc
-"
-" SetTitle func, add comment
 func SetTitle()
-
-    call append(line(".")+1, "*   ")
-    call append(line(".")+2, "*   Author      : longbin")
-    call append(line(".")+3, "*   Created date: ".strftime("%F %T"))
-    call append(line(".")+5, "*   Description : ")
-    call append(line(".")+6, "*")
-    if &filetype == 'make'
-        call setline(1,"")
-        call setline(2,"")
-        " call SetComment_sh()
-    elseif &filetype == 'sh'
-        call setline(1,"#! /bin/bash")
-        call setline(2,"")
-        " call SetComment_sh()
- 
-    elseif &filetype == 'python'
-        call setline(1,"#! /usr/bin/env python")
-        call setline(2,"# coding=utf-8")
-        call setline(3,"")
-        " call SetComment_sh()
- 
-    else
-
-        if expand("%:e") == 'hpp'
-            call append(line(".")+10, "#ifndef _".toupper(expand("%:t:r"))."_H")
-            call append(line(".")+11, "#define _".toupper(expand("%:t:r"))."_H")
-            call append(line(".")+12, "#ifdef __cplusplus")
-            call append(line(".")+13, "extern \"C\"")
-            call append(line(".")+14, "{")
-            call append(line(".")+15, "#endif")
-            call append(line(".")+16, "")
-            call append(line(".")+17, "#ifdef __cplusplus")
-            call append(line(".")+18, "}")
-            call append(line(".")+19, "#endif")
-            call append(line(".")+20, "#endif //".toupper(expand("%:t:r"))."_H")
- 
-        elseif expand("%:e") == 'h'
-            call append(line(".")+10, "#pragma once")
- 
-        elseif expand("%:e") == 'c'
-            call append(line(".")+10,"#include \"".expand("%:t:r").".h\"")
- 
-        elseif expand("%:e") == 'cpp'
-            call setline(1,"#include<bits/stdc++.h>")
-            call append(line("."), "using namespace std;")
-            call append(line(".")+1,"<++>")
+    if expand("%:e") == 'cpp'
+        call setline(1,"#include<bits/stdc++.h>")
+        call append(line("."), "using namespace std;")
+        call append(line(".")+1,"<++>")
 " #include<bits/stdc++.h" >
 " 2 using namespace std;
 " 3
@@ -572,8 +264,6 @@ func SetTitle()
 " 5
 " 6     return 0;
 " 7 }
-        elseif expand("%:e") == 'py'
-        endif
     endif
 endfunc
 
@@ -590,6 +280,8 @@ Plug 'vim-airline/vim-airline'
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'ryanoasis/vim-devicons'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " enhance devicons
 
 
 "================
@@ -695,13 +387,19 @@ Plug 'mzlogin/vim-markdown-toc'
 
 Plug 'kshenoy/vim-signature'
 
+"========
+"### compiler ###
+"========
+
+Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
+
+
 "================
 "### debugger ###
 "================
 
 Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-python'}
-" Plug 'skywind3000/asynctasks.vim'
-" Plug 'skywind3000/asyncrun.vim'
 
 "==============================
 "### Other useful utilities ###
@@ -1157,9 +855,38 @@ sign define vimspectorPC text=🔶 texthl=SpellBad
 
 " ######### Async setting ##########
 
-" let g:asyncrun_open = 6
+let g:asyncrun_open = 6
+let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg']
+noremap <silent>sr :AsyncTask file-run<cr>
+noremap <silent>sb :AsyncTask make<cr>
+" terminal mode: tab/curwin/top/bottom/left/right/quickfix/external
+let g:asynctasks_term_pos = 'right'
 
+let g:asynctasks_term_rows = 10    " 设置纵向切割时，高度为 10
+let g:asynctasks_term_cols = 80    " 设置横向切割时，宽度为 80
 
+" tab模式终端复用
+let g:asynctasks_term_reuse = 1
+
+" 分屏终端焦点不变
+" let g:asynctasks_term_focus = 0
+
+" /.vim下全局配置名称
+" let g:asynctasks_rtp_config = '~/.config/nvim/tasks.ini'
+
+" 默认全局配置名
+" let g:asynctasks_config_name = '.config/nvim/asyncTasks/.tasks.ini'
+
+" 额外默认配置
+let g:asynctasks_extra_config = [
+    \ '~/.config/nvim/asyncTasks/tasks.ini',
+    \ ]
+
+" UI任务选择
+"let current_tasks = asynctasks#list("")
+
+" 配置文件不使用模板
+let g:asynctasks_template = 0
 
 " ######### Auto Format ##########
 
