@@ -9,6 +9,7 @@
 " 大括号自动分行, C/C++下的自动命令, 添加到 .vimrc
 autocmd BufWritePre,BufRead *.c :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
 autocmd BufWritePre,BufRead *.cpp :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
+" autocmd BufEnter *.cpp :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
 
 function BracketsEnter(char)
     if getline('.')[col('.')-1] == a:char
@@ -23,6 +24,12 @@ endf
 
 nmap <leader>l :bnext<CR>;
 nmap <leader>h :bprev<CR>;
+
+
+" ######### yank ##########
+
+" sudo pacman -S xsel
+vnoremap Y "+y
 
 
 " ######### Auto load in first time ##########
@@ -62,17 +69,17 @@ language message zh_CN.UTF-8
 "##### auto fcitx  ###########
 let g:input_toggle = 1
 function! Fcitx2en()
-   let s:input_status = system("fcitx-remote")
+   let s:input_status = system("fcitx5-remote")
    if s:input_status == 2
       let g:input_toggle = 1
-      let l:a = system("fcitx-remote -c")
+      let l:a = system("fcitx5-remote -c")
    endif
 endfunction
 
 function! Fcitx2zh()
-   let s:input_status = system("fcitx-remote")
+   let s:input_status = system("fcitx5-remote")
    if s:input_status != 2 && g:input_toggle == 1
-      let l:a = system("fcitx-remote -o")
+      let l:a = system("fcitx5-remote -o")
       let g:input_toggle = 0
    endif
 endfunction
@@ -140,6 +147,12 @@ map sq :q!<CR>
 map S :w<CR>
 map R :source $MYVIMRC<CR>
 
+function! Refresh()
+    exec "mapclear"
+    exec "source $MYVIMRC<"
+endfunction
+
+
 map sl :set splitright<CR>:vsplit<CR>
 map sh :set nosplitright<CR>:vsplit<CR>
 map sk :set nosplitbelow<CR>:split<CR>
@@ -149,41 +162,55 @@ map sV <C-w>t<C-w>H
 map sH <C-w>t<C-w>K
 
 map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
+imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
 
 " 寻找两个相等的单词
 map <LEADER>fd /\(\<\w\+\>\)\_s*\1
 
-"================= 根据文件类型映射按键 =================
-if expand('%:t:e') == 'md'
-  imap ,. <Esc>I* <Esc>A
-  nmap ,b <Esc>Bi**<Esc>Ea**<Esc>
-  imap ,b **<Esc>hi**
-  imap ,l <Esc>a**<Esc>i
-  imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
-  " xdot
-  " imap ,, <Esc>:call PlayAndPause()<CR>
-  " imap ,, :call PlayAndPause()<CR>
-  imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
-  imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
-
-  nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
-
-  " map sp :call PlayAndPause()<CR>
-  " func! PlayAndPause()
-  "   exec "! xdotool key Alt+Tab"
-  "   exec "! xdotool mousemove 1100 540 click 1"
-  "   exec "! xdotool key Alt+Tab"
-  " endfunc
-  "
-  """""
+imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
+if expand("%:e") == 'cpp'
+    exec "unmap ,,"
+    echo "已移除"
 endif
+" "================= 根据文件类型映射按键 =================
 
-if expand('%:t:e') == 'cpp'
+" autocmd BufEnter *.cpp,*.md,*.vim,*.py exec ":call MapOrUnmap()"
 
-    imap ,, <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>a
-    imap ，， <Esc>:!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>a
-    nmap ,, :!time xdotool key Alt+Tab sleep 0.15 mousemove 1100 540 click 1 key Alt+Tab<CR><CR>
-endif
+" func MapOrUnmap()
+"     if expand("%:e") == 'cpp'
+"          exec "imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a"
+"          exec "imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a"
+"          exec "nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>"
+"     elseif expand("%:e") == 'md'
+"          exec "imap ,. <Esc>I* <Esc>A"
+"
+"     else
+"          exec "unmap ,,"
+"     endif
+" endfunc
+" if expand('%:t:e') == 'md'
+"   imap ,. <Esc>I* <Esc>A
+"   nmap ,b <Esc>Bi**<Esc>Ea**<Esc>
+"   imap ,b **<Esc>hi**
+"   imap ,l <Esc>a**<Esc>i
+"   imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
+"   " xdot
+"   " imap ,, <Esc>:call PlayAndPause()<CR>
+"   " imap ,, :call PlayAndPause()<CR>
+"   imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+"   imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+"   nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>        
+"
+" elseif expand('%:t:e') == 'cpp'
+"   imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+"   imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+"   nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
+"   exec "unmap T"
+" else
+"   exec "unmap T"
+" endif
 
 " =================== end =========================
 
@@ -206,7 +233,7 @@ map tl :+tabnext<CR>
 
 map tx :r !figlet 
 
-map Tv :e ~/.config/nvim/init.vim<CR>
+map tV :e ~/.config/nvim/init.vim<CR>
 
 " 映射全选+复制 ctrl+a
 imap <C-a> <Esc>ggVG
@@ -218,11 +245,11 @@ vmap <C-a> ggG
 vnoremap <LEADER>y "+y
 
 "将系统剪贴板内容粘贴到vim
-nmap <LEADER>p "+p"
+" nmap <LEADER>p "+p"
 
 
 "共享剪贴板  
-set clipboard+=unnamed
+" set clipboard+=unnamed
 
 " 历史记录数
 set history=1000
@@ -280,7 +307,7 @@ Plug 'vim-airline/vim-airline'
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
-" Plug 'ryanoasis/vim-devicons'
+Plug 'ryanoasis/vim-devicons'
 " Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " enhance devicons
 
 
@@ -304,9 +331,9 @@ Plug 'w0rp/ale'
 "====================
 
 " Or build from source code by using yarn: https://yarnpkg.com
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+" Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'neoclide/coc-jedi', {'do': 'yarn install'}
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 "===================
 "### auto format ###
@@ -372,6 +399,9 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'f
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'mzlogin/vim-markdown-toc'
+Plug 'ferrine/md-img-paste.vim'
+Plug 'plasticboy/vim-markdown'
+Plug 'mzlogin/vim-markdown-toc'
 
 "=============
 "### theme ###
@@ -409,16 +439,14 @@ Plug 'terryma/vim-multiple-cursors'
 "Plug 'junegunn/goyo.vim' " distraction free writing mode
 Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
 Plug 'godlygeek/tabular' " type ;Tabularize /= to align the =
-Plug 'plasticboy/vim-markdown'
 Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or type i) i] i} ip
 Plug 'kien/rainbow_parentheses.vim'
-
+Plug 'junegunn/vim-peekaboo' " 双引号提示
 
 "====================
 "### Dependencies ###
 "====================
 
-Plug 'mzlogin/vim-markdown-toc'
 Plug 'ferrine/md-img-paste.vim'
 Plug '907th/vim-auto-save'
 
@@ -499,7 +527,7 @@ let g:NERDTreeIndicatorMapCustom = {
 " ######### Tag list/ tagbar ##########
 
 let g:tagbar_width=30
-    nnoremap <silent> <leader>t :TagbarToggle<CR> " 将tagbar的开关按键设置为 F4
+    nnoremap <silent> T :TagbarOpenAutoClose<CR> " 将tagbar的开关按键设置为 F4
 
 
 " ######### airline ##########
@@ -622,37 +650,93 @@ let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 
-
 "设置打开配置文件时为垂直打开
 let g:UltiSnipsEditSplit="vertical"
 
 
-" ######### MarkdownPreview Setting ##########
-let g:mkdp_auto_start = 0
-let g:mkdp_auto_close = 1
-let g:mkdp_refresh_slow = 0
-let g:mkdp_command_for_global = 0
-let g:mkdp_open_to_the_world = 0
-let g:mkdp_open_ip = ''
-let g:mkdp_echo_preview_url = 0
-let g:mkdp_browserfunc = ''
-let g:mkdp_preview_options = {
-            \ 'mkit': {},
-            \ 'katex': {},
-            \ 'uml': {},
-            \ 'maid': {},
-            \ 'disable_sync_scroll': 0,
-            \ 'sync_scroll_type': 'middle',
-            \ 'hide_yaml_meta': 1
-            \ }
-let g:mkdp_markdown_css = ''
-let g:mkdp_highlight_css = ''
-let g:mkdp_port = ''
-let g:mkdp_page_title = '「${name}」'
+" " ######### MarkdownPreview Setting ##########
+" let g:mkdp_auto_start = 0
+" let g:mkdp_auto_close = 1
+" let g:mkdp_refresh_slow = 0
+" let g:mkdp_command_for_global = 0
+" let g:mkdp_open_to_the_world = 0
+" let g:mkdp_open_ip = ''
+" let g:mkdp_echo_preview_url = 0
+" let g:mkdp_browserfunc = ''
+" let g:mkdp_preview_options = {
+"             \ 'mkit': {},
+"             \ 'katex': {},
+"             \ 'uml': {},
+"             \ 'maid': {},
+"             \ 'disable_sync_scroll': 0,
+"             \ 'sync_scroll_type': 'middle',
+"             \ 'hide_yaml_meta': 1
+"             \ }
+" let g:mkdp_markdown_css = ''
+" let g:mkdp_highlight_css = ''
+" let g:mkdp_port = ''
+" let g:mkdp_page_title = '「${name}」'
+"
+
+
+" ######### Markdown img ##########
+
+"设置默认储存文件夹。这里表示储存在当前文档所在文件夹下的'pic'文件夹下，相当于 ./pic/
+let g:mdip_imgdir = 'pic' 
+"设置默认图片名称。当图片名称没有给出时，使用默认图片名称
+let g:mdip_imgname = 'image'
+"设置快捷键，个人喜欢 Ctrl+p 的方式，比较直观
+autocmd FileType markdown nnoremap <silent> <C-p> :call mdip#MarkdownClipboardImage()<CR>F%i
 
 
 " ######### Ruby ##########
 let g:ruby_host_prog = '/home/wgc/.gem/ruby/2.7.0/bin/neovim-ruby-host'
+
+
+
+" ######### coc-setting ##########
+
+let g:coc_global_extensions = [
+  \ 'coc-actions',
+  \ 'coc-css',
+  \ 'coc-diagnostic',
+  \ 'coc-explorer',
+  \ 'coc-flutter',
+  \ 'coc-gitignore',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-lists',
+  \ 'coc-prettier',
+  \ 'coc-pyright',
+  \ 'coc-python',
+  \ 'coc-snippets',
+  \ 'coc-sourcekit',
+  \ 'coc-syntax',
+  \ 'coc-tasks',
+  \ 'coc-todolist',
+  \ 'coc-translator',
+  \ 'coc-tslint-plugin',
+  \ 'coc-tsserver',
+  \ 'coc-vimlsp',
+  \ 'coc-vimlsp',
+  \ 'coc-yaml',
+  \ 'coc-yank']
+
+
+  " \ 'coc-stylelint',
+
+
+" ######### coc-translator ##########
+
+" popup
+nmap <Leader>t <Plug>(coc-translator-p)
+vmap <Leader>t <Plug>(coc-translator-pv)
+" echo
+" nmap <Leader>e <Plug>(coc-translator-e)
+" nmap <Leader>e <Plug>(coc-translator-ev)
+" " replace
+" nmap <Leader>r <Plug>(coc-translator-r)
+" nmap <Leader>r <Plug>(coc-translator-rv)
 
 
 
@@ -665,13 +749,13 @@ imap <C-l> <Plug>(coc-snippets-expand)
 vmap <C-j> <Plug>(coc-snippets-select)
 
 " Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<c-j>'
+" let g:coc_snippet_next = '<c-j>'
 
 " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<c-k>'
+" let g:coc_snippet_prev = '<c-k>'
 
 " Use <C-j> for both expand and jump (make expand higher priority.)
-imap <C-j> <Plug>(coc-snippets-expand-jump)
+" imap <c-j> <Plug>(coc-snippets-expand-jump)
 
 
 
@@ -718,14 +802,14 @@ function! s:checunction_name()
     " code
 endf
 " Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-j> coc#refresh()
+inoremap <silent><expr> <c-h> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
 if exists('*complete_info')
   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
+
   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
@@ -809,23 +893,23 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" Mappings for CoCList
-" Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-" Show commands.
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols.
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" " Mappings for CoCList
+" " Show all diagnostics.
+" nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" " Manage extensions.
+" nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" " Show commands.
+" nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" " Find symbol of current document.
+" nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" " Search workspace symbols.
+" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" " Do default action for next item.
+"  nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" " Do default action for previous item.
+" nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" " Resume latest coc list.
+" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 
 " ######### vimspector ##########
@@ -859,6 +943,7 @@ let g:asyncrun_open = 6
 let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg']
 noremap <silent>sr :AsyncTask file-run<cr>
 noremap <silent>sb :AsyncTask make<cr>
+noremap <silent>ss :AsyncTask file-build<cr>
 " terminal mode: tab/curwin/top/bottom/left/right/quickfix/external
 let g:asynctasks_term_pos = 'right'
 
