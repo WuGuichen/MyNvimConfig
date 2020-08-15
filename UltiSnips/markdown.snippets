@@ -209,42 +209,52 @@ endsnippet
 
 context "math()"
 snippet cred "red" Ai
-\color{red} 
+\color{#FF0000} 
 endsnippet
 
 context "math()"
 snippet cgre "green" Ai
-\color{LimeGreen} 
+\color{#00FF00} 
 endsnippet
 
 context "nomath()"
 snippet cred "red" Ai
-<font color=red>$0</font> <++>
+<font color=#FF0000>$0</font>
 endsnippet
 
 context "nomath()"
 snippet cgre "green" Ai
-<font color=LimeGreen>$0</font> <++>
+<font color=#00FF00>$0</font>
 endsnippet
 
 context "nomath()"
 snippet cblue "blue" Ai
-<font color=RoyalBlue>$0</font> <++>
+<font color=#0000FF>$0</font>
 endsnippet
 
 context "nomath()"
 snippet cblack "black" Ai
-<font color=black>$0</font> <++>
+<font color=#000000>$0</font>
 endsnippet
 
 context "math()"
 snippet cblue "blue" Ai
-\color{RoyalBlue} 
+\color{#0000FF} 
 endsnippet
 
 context "math()"
 snippet cblack "black" Ai
-\color{black} 
+\color{#000000} 
+endsnippet
+
+context "math()"
+snippet cpur "purple" Ai
+\color{#EE82EE} 
+endsnippet
+
+context "nomath()"
+snippet cpur "purple" Ai
+<font color=#EE82EE>$0</font>
 endsnippet
 
 context "math()"
@@ -936,3 +946,7 @@ snippet Box "Box"
 `!p snip.rv = '└'+ '—'* (len(t[ 1]) + 2) + '┘'`
 $0
 endsnippet
+
+snippet ,b "加粗分点" bi
+* **$0**
+endsnippet 

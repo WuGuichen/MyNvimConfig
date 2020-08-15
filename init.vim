@@ -24,7 +24,7 @@ endf
 
 nmap <leader>l :bnext<CR>;
 nmap <leader>h :bprev<CR>;
-
+nmap <leader>x :bdelete<CR>
 
 " ######### yank ##########
 
@@ -43,7 +43,7 @@ let mapleader = " "
 
 set norelativenumber
 set wrap
-set cursorline
+set nocursorline
 set number
 set relativenumber
 set modifiable
@@ -93,7 +93,7 @@ autocmd InsertEnter * call Fcitx2zh()
 "##### auto fcitx end ######
 
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -116,12 +116,12 @@ let &t_ut=''
 set expandtab
 set tabstop=4
 set ts=4
-set expandtab
+" set expandtab
 set shiftwidth=4
 set softtabstop=2
 set list 
 set listchars=tab:▸\ ,trail:▫
-set scrolloff=9
+set scrolloff=14
 set tw=0
 set indentexpr=
 set backspace=indent,eol,start
@@ -132,7 +132,8 @@ let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " ################# 状态栏设置 #####################
 
-set laststatus=2
+map <leader>cs :set laststatus=2<cr>
+set laststatus=1
 set t_Co=256      "在windows中用xshell连接打开vim可以显示色彩
 
 " ################# 状态栏 结束 ####################
@@ -165,15 +166,18 @@ map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
 imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
 
 " 寻找两个相等的单词
-map <LEADER>fd /\(\<\w\+\>\)\_s*\1
+" map <LEADER>fd /\(\<\w\+\>\)\_s*\1
 
 imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
-if expand("%:e") == 'cpp'
-    exec "unmap ,,"
-    echo "已移除"
-endif
+
+
+
+" if expand("%:e") == 'cpp'
+"     exec "unmap ,,"
+"     echo "已移除"
+" endif
 " "================= 根据文件类型映射按键 =================
 
 " autocmd BufEnter *.cpp,*.md,*.vim,*.py exec ":call MapOrUnmap()"
@@ -277,8 +281,8 @@ set history=1000
 """""新文件标题""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " add header comments for .h .c .hpp .cpp .mk .sh new file
 " auto call SetTitle func
-autocmd BufNewFile *.[ch],*.hpp,*.cpp,Makefile,*.mk,*.sh,*.py exec ":call SetTitle()"
- 
+autocmd BufNewFile *.cpp exec ":call SetTitle()"
+
 func SetTitle()
     if expand("%:e") == 'cpp'
         call setline(1,"#include<bits/stdc++.h>")
@@ -298,6 +302,7 @@ endfunc
 call plug#begin('~/.vim/plugged')
 
 Plug 'mhinz/vim-startify'
+
 Plug 'vim-airline/vim-airline'
 
 
@@ -395,18 +400,20 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 "### Markdown ###
 "================
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'ferrine/md-img-paste.vim'
 Plug 'plasticboy/vim-markdown'
-Plug 'mzlogin/vim-markdown-toc'
+" Plug 'mzlogin/vim-markdown-toc'
 
 "=============
 "### theme ###
 "=============
 
+Plug 'joshdick/onedark.vim'
 " Plug 'crusoexia/vim-monokai'
 " Plug 'connorholyday/vim-snazzy'
 " Plug 'tyrannicaltoucan/vim-quantum'
@@ -436,12 +443,13 @@ Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-
 "==============================
 
 Plug 'terryma/vim-multiple-cursors'
-"Plug 'junegunn/goyo.vim' " distraction free writing mode
+Plug 'junegunn/goyo.vim' " distraction free writing mode
 Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
 Plug 'godlygeek/tabular' " type ;Tabularize /= to align the =
 Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or type i) i] i} ip
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'junegunn/vim-peekaboo' " 双引号提示
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
 "====================
 "### Dependencies ###
@@ -472,7 +480,18 @@ Plug 'lervag/vimtex'
 
 call plug#end()
 
-"let g:markdown_preview_sync_firefox_path = "C:\Program Files\Mozilla Firefox"
+" ============================ end plug =============================
+
+" ============================ setting ==================================
+
+
+" ######### WhichKey setting ##########
+
+" nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
+
+" By default timeoutlen is 1000 ms
+set timeoutlen=500
 
 " ######### theme ##########
 
@@ -483,6 +502,9 @@ call plug#end()
 " colorscheme quantum
 " let g:quantum_italics=1
 " let g:airline_theme='quantum'
+"
+" let g:airline_theme='onedark'
+" colorscheme onedark
 
 " ######### undotree ##########
 
@@ -640,7 +662,6 @@ let g:mkdp_auto_start = 1
 let g:mkdp_delay_start_browser = 800
 "let g:mkdp_delay_auto_refresh = 3000
 
-let g:vim_markdown_math = 1
 
 
 "UltiSnips 设置tab键为触发键
@@ -652,6 +673,45 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 "设置打开配置文件时为垂直打开
 let g:UltiSnipsEditSplit="vertical"
+
+
+" ######### startify setting ##########
+
+" 显示git信息
+" returns all modified files of the current git repo
+" `2>/dev/null` makes the command fail quietly, so that when we are not
+" in a git repo, the list will be empty
+" function! s:gitModified()
+"     let files = systemlist('git ls-files -m 2>/dev/null')
+"     return map(files, "{'line': v:val, 'path': v:val}")
+" endfunction
+"
+" " same as above, but show untracked files, honouring .gitignore
+" function! s:gitUntracked()
+"     let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
+"     return map(files, "{'line': v:val, 'path': v:val}")
+" endfunction
+"
+" let g:startify_lists = [
+"         \ { 'type': 'files',     'header': ['   MRU']            },
+"         \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+"         \ { 'type': 'sessions',  'header': ['   Sessions']       },
+"         \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+"         \ { 'type': function('s:gitModified'),  'header': ['   git modified']},
+"         \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
+"         \ { 'type': 'commands',  'header': ['   Commands']       },
+"         \ ]
+
+" " Read ~/.NERDTreeBookmarks file and takes its second column
+" function! s:nerdtreeBookmarks()
+"     let bookmarks = systemlist("cut -d' ' -f 2 ~/.NERDTreeBookmarks")
+"     let bookmarks = bookmarks[0:-2] " Slices an empty last line
+"     return map(bookmarks, "{'line': v:val, 'path': v:val}")
+" endfunction
+"
+" let g:startify_lists = [
+"         \ { 'type': function('s:nerdtreeBookmarks'), 'header': ['   NERDTree Bookmarks']}
+"         \]
 
 
 " " ######### MarkdownPreview Setting ##########
@@ -687,6 +747,14 @@ let g:mdip_imgdir = 'pic'
 let g:mdip_imgname = 'image'
 "设置快捷键，个人喜欢 Ctrl+p 的方式，比较直观
 autocmd FileType markdown nnoremap <silent> <C-p> :call mdip#MarkdownClipboardImage()<CR>F%i
+
+
+" ######### Vim Markdown setting ##########
+
+let g:tex_conceal = ""
+let g:vim_markdown_math = 1
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_conceal = 0
 
 
 " ######### Ruby ##########
@@ -763,6 +831,17 @@ vmap <C-j> <Plug>(coc-snippets-select)
 "call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
 "call dein#add('neoclide/coc.nvim', {'merged':0, 'build': 'yarn install --frozen-lockfile'})
 
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+function! SetupCommandAbbrs(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() ==# ":" && getcmdline() ==# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfunction
+
+" Use C to open coc config
+call SetupCommandAbbrs('C', 'CocConfig')
+
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -812,6 +891,9 @@ if exists('*complete_info')
 
   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
+
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
+"                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -893,23 +975,23 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" " Mappings for CoCList
-" " Show all diagnostics.
-" nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-" " Manage extensions.
-" nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-" " Show commands.
-" nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-" " Find symbol of current document.
-" nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-" " Search workspace symbols.
-" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-" " Do default action for next item.
-"  nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" " Do default action for previous item.
-" nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" " Resume latest coc list.
-" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" Mappings for CoCList
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <space>m  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 
 " ######### vimspector ##########
@@ -976,3 +1058,51 @@ let g:asynctasks_template = 0
 " ######### Auto Format ##########
 
 noremap <leader>f :Autoformat<CR>
+noremap <leader>cf :%retab!<CR>
+
+
+let g:autoformat_autoindent = 1
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 1
+
+" let g:formatter_yapf_style = 'pep8'
+let g:formatdef_allman = '"astyle --style=allman --pad-oper"'
+let g:formatters_cpp = ['allman']
+let g:formatters_c = ['allman']
+
+
+" ######### ALE setting ##########
+
+let g:ale_linters_explicit = 1
+let g:ale_completion_delay = 500
+let g:ale_echo_delay = 20
+let g:ale_lint_delay = 500
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:airline#extensions#ale#enabled = 1
+
+let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
+let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
+let g:ale_c_cppcheck_options = ''
+let g:ale_cpp_cppcheck_options = ''
+
+
+" ######### Goyo settinh ##########
+
+" " Width
+" Goyo 220
+"
+" " Height
+" Goyo x60
+"
+" " Both
+" Goyo 120x30
+"
+" " In percentage
+" Goyo 120x50%
+"
+" " With offsets
+" Goyo 0%x50%-25%
+
+noremap <leader>cg :Goyo 100%x100%<cr>

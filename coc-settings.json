@@ -1,3 +1,20 @@
 {
-  "coc.preferences.extensionUpdateCheck": "daily"
+    // diagnostic-languageserver
+    "diagnostic-languageserver.filetypes": {
+        "vim": "vint",
+        "email": "languagetool",
+        "markdown": [ "write-good", "markdownlint" ],
+        "sh": "shellcheck",
+        "elixir": ["mix_credo", "mix_credo_compile"],
+        "eelixir": ["mix_credo", "mix_credo_compile"],
+        "php": ["phpstan", "psalm"]
+    },
+    "diagnostic-languageserver.formatFiletypes": {
+        "dart": "dartfmt",
+        "elixir": "mix_format",
+        "eelixir": "mix_format",
+        "lua": "lua-format",
+        "sh": "shfmt",
+        "blade": "blade-formatter"
+    }
 }
