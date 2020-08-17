@@ -950,3 +950,37 @@ endsnippet
 snippet ,b "加粗分点" bi
 * **$0**
 endsnippet 
+
+snippet startuml "startUML" b
+@startuml
+
+$0
+
+@enduml
+endsnippet 
+
+snippet classLight "just class" b
+class ${1:classname}{
+<++>
+}
+endsnippet
+
+snippet class "A class include three member" b
+class ${1:classname} {
+__ public __
+
++ <++>
+__ protected __
+
+# <++>
+
+__ private __
+
+- <++>
+
+}
+endsnippet
+
+snippet noteas "note as Nn" b
+note "<++>" as N${1:1}
+endsnippet

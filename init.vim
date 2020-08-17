@@ -1,7 +1,6 @@
 " ######### For MarkdownPreview ##########
 
-" sudo npm install tslib neovim log4js socket.io msgpack-lite
-
+" 
 
 
 " ######### 大括号自动换行 ##########
@@ -19,27 +18,11 @@ function BracketsEnter(char)
     endif
 endf
 
-
 " ######### buffers ##########
 
-nmap <leader>l :bnext<CR>;
-nmap <leader>h :bprev<CR>;
-nmap <leader>x :bdelete<CR>
-
-" ######### yank ##########
-
-" sudo pacman -S xsel
-vnoremap Y "+y
-
-
-" ######### Auto load in first time ##########
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
-    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-let mapleader = " "
+noremap <leader>l :bnext<CR>;
+noremap <leader>h :bprev<CR>;
+noremap <leader>x :bdelete<CR>
 
 set norelativenumber
 set wrap
@@ -65,32 +48,8 @@ filetype plugin indent on
 set encoding=UTF-8
 set langmenu=zh_CN.UTF-8
 language message zh_CN.UTF-8
-
-"##### auto fcitx  ###########
-let g:input_toggle = 1
-function! Fcitx2en()
-   let s:input_status = system("fcitx5-remote")
-   if s:input_status == 2
-      let g:input_toggle = 1
-      let l:a = system("fcitx5-remote -c")
-   endif
-endfunction
-
-function! Fcitx2zh()
-   let s:input_status = system("fcitx5-remote")
-   if s:input_status != 2 && g:input_toggle == 1
-      let l:a = system("fcitx5-remote -o")
-      let g:input_toggle = 0
-   endif
-endfunction
-
 set noswapfile
 set ttimeoutlen=150
-"退出插入模式
-autocmd InsertLeave * call Fcitx2en()
-"进入插入模式
-autocmd InsertEnter * call Fcitx2zh()
-"##### auto fcitx end ######
 
 " Give more space for displaying messages.
 set cmdheight=1
@@ -121,7 +80,7 @@ set shiftwidth=4
 set softtabstop=2
 set list 
 set listchars=tab:▸\ ,trail:▫
-set scrolloff=14
+set scrolloff=6
 set tw=0
 set indentexpr=
 set backspace=indent,eol,start
@@ -130,11 +89,18 @@ set foldlevel=99
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
 " ################# 状态栏设置 #####################
 
 map <leader>cs :set laststatus=2<cr>
 set laststatus=1
 set t_Co=256      "在windows中用xshell连接打开vim可以显示色彩
+
+"共享剪贴板  
+" set clipboard+=unnamed
+
+" 历史记录数
+set history=1000
 
 " ################# 状态栏 结束 ####################
 set autochdir
@@ -142,6 +108,46 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 set tw=0
 set foldmethod=indent
 
+"##### auto fcitx  ###########
+let g:input_toggle = 1
+function! Fcitx2en()
+   let s:input_status = system("fcitx5-remote")
+   if s:input_status == 2
+      let g:input_toggle = 1
+      let l:a = system("fcitx5-remote -c")
+   endif
+endfunction
+
+function! Fcitx2zh()
+   let s:input_status = system("fcitx5-remote")
+   if s:input_status != 2 && g:input_toggle == 1
+      let l:a = system("fcitx5-remote -o")
+      let g:input_toggle = 0
+   endif
+endfunction
+
+"退出插入模式
+autocmd InsertLeave * call Fcitx2en()
+"进入插入模式
+autocmd InsertEnter * call Fcitx2zh()
+"##### auto fcitx end ######
+let mapleader = " "
+
+
+""""""""""""""""""""""""""""""""" map """""""""""""""""""""""""""""""""""
+
+" ######### yank ##########
+
+" sudo pacman -S xsel
+vnoremap Y "+y
+
+
+" ######### Auto load in first time ##########
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
 map s <nop>
 map sq :q!<CR>
@@ -173,50 +179,6 @@ imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
 
 
-
-" if expand("%:e") == 'cpp'
-"     exec "unmap ,,"
-"     echo "已移除"
-" endif
-" "================= 根据文件类型映射按键 =================
-
-" autocmd BufEnter *.cpp,*.md,*.vim,*.py exec ":call MapOrUnmap()"
-
-" func MapOrUnmap()
-"     if expand("%:e") == 'cpp'
-"          exec "imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a"
-"          exec "imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a"
-"          exec "nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>"
-"     elseif expand("%:e") == 'md'
-"          exec "imap ,. <Esc>I* <Esc>A"
-"
-"     else
-"          exec "unmap ,,"
-"     endif
-" endfunc
-" if expand('%:t:e') == 'md'
-"   imap ,. <Esc>I* <Esc>A
-"   nmap ,b <Esc>Bi**<Esc>Ea**<Esc>
-"   imap ,b **<Esc>hi**
-"   imap ,l <Esc>a**<Esc>i
-"   imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
-"   " xdot
-"   " imap ,, <Esc>:call PlayAndPause()<CR>
-"   " imap ,, :call PlayAndPause()<CR>
-"   imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
-"   imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
-"   nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>        
-"
-" elseif expand('%:t:e') == 'cpp'
-"   imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
-"   imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
-"   nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
-"   exec "unmap T"
-" else
-"   exec "unmap T"
-" endif
-
-" =================== end =========================
 
 noremap <LEADER><CR> :nohlsearch<CR>
 " 分屏移动
@@ -252,31 +214,6 @@ vnoremap <LEADER>y "+y
 " nmap <LEADER>p "+p"
 
 
-"共享剪贴板  
-" set clipboard+=unnamed
-
-" 历史记录数
-set history=1000
-
-"自动补全
-" :inoremap ( ()<ESC>i
-" :inoremap ) <c-r>=ClosePair(')')<CR>
-" ":inoremap { {<CR>}<ESC>O
-" ":inoremap } <c-r>=ClosePair('}')<CR>
-" :inoremap [ []<ESC>i
-" :inoremap ] <c-r>=ClosePair(']')<CR>
-" ":inoremap " ""<ESC>i
-" ":inoremap ' ''<ESC>i
-" function! ClosePair(char)
-"     if getline('.')[col('.') - 1] == a:char
-"         return "\<Right>"
-"     else
-"         return a:char
-"     endif
-" endfunction
-" "打开文件类型检测, 加了这句才可以用智能补全
-" set completeopt=longest,menu
-
 
 """""新文件标题""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " add header comments for .h .c .hpp .cpp .mk .sh new file
@@ -302,9 +239,15 @@ endfunc
 call plug#begin('~/.vim/plugged')
 
 Plug 'mhinz/vim-startify'
-
 Plug 'vim-airline/vim-airline'
 
+"===================
+"### UML preview ###
+"===================
+
+" Plug 'weirongxu/plantuml-previewer.vim'
+" Plug 'tyru/open-browser.vim'
+Plug 'aklt/plantuml-syntax'
 
 "=======================
 "### File navigation ###
@@ -376,7 +319,7 @@ Plug 'itchyny/vim-cursorword'
 Plug 'rhysd/conflict-marker.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
-"Plug 'gisphm/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
+" Plug 'gisphm/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
 
 
 "=============================================
@@ -393,7 +336,6 @@ Plug 'mhinz/vim-signify'
 "=====================
 
 Plug 'octol/vim-cpp-enhanced-highlight'
-
 
 
 "================
@@ -424,6 +366,7 @@ Plug 'joshdick/onedark.vim'
 
 Plug 'kshenoy/vim-signature'
 
+
 "========
 "### compiler ###
 "========
@@ -438,6 +381,7 @@ Plug 'skywind3000/asyncrun.vim'
 
 Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-python'}
 
+
 "==============================
 "### Other useful utilities ###
 "==============================
@@ -451,6 +395,7 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'junegunn/vim-peekaboo' " 双引号提示
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
+
 "====================
 "### Dependencies ###
 "====================
@@ -462,7 +407,9 @@ Plug '907th/vim-auto-save'
 "===========
 "### 对齐线 ###
 "===========
+
 Plug 'Yggdroot/indentLine'
+
 
 "================
 "### coc美化状态栏 ###
@@ -483,6 +430,12 @@ call plug#end()
 " ============================ end plug =============================
 
 " ============================ setting ==================================
+
+
+" ######### UML setting ##########
+
+" Windowsでの設定例です。Mac他の場合は外部コマンド部分を読み替えてください。
+" au FileType plantuml command! OpenUml :!firefox %
 
 
 " ######### WhichKey setting ##########
@@ -714,29 +667,36 @@ let g:UltiSnipsEditSplit="vertical"
 "         \]
 
 
-" " ######### MarkdownPreview Setting ##########
-" let g:mkdp_auto_start = 0
-" let g:mkdp_auto_close = 1
-" let g:mkdp_refresh_slow = 0
-" let g:mkdp_command_for_global = 0
-" let g:mkdp_open_to_the_world = 0
-" let g:mkdp_open_ip = ''
-" let g:mkdp_echo_preview_url = 0
-" let g:mkdp_browserfunc = ''
-" let g:mkdp_preview_options = {
-"             \ 'mkit': {},
-"             \ 'katex': {},
-"             \ 'uml': {},
-"             \ 'maid': {},
-"             \ 'disable_sync_scroll': 0,
-"             \ 'sync_scroll_type': 'middle',
-"             \ 'hide_yaml_meta': 1
-"             \ }
-" let g:mkdp_markdown_css = ''
-" let g:mkdp_highlight_css = ''
-" let g:mkdp_port = ''
-" let g:mkdp_page_title = '「${name}」'
-"
+" ######### MarkdownPreview Setting ##########
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_close = 1
+let g:mkdp_refresh_slow = 0
+let g:mkdp_command_for_global = 0
+let g:mkdp_open_to_the_world = 0
+let g:mkdp_open_ip = ''
+let g:mkdp_echo_preview_url = 0
+let g:mkdp_browserfunc = ''
+let g:mkdp_preview_options = {
+            \ 'mkit': {},
+            \ 'katex': {},
+            \ 'uml': {},
+            \ 'maid': {},
+            \ 'disable_sync_scroll': 0,
+            \ 'sync_scroll_type': 'middle',
+            \ 'hide_yaml_meta': 1
+            \ }
+let g:mkdp_markdown_css = ''
+let g:mkdp_highlight_css = ''
+let g:mkdp_port = ''
+let g:mkdp_page_title = '「${name}」'
+
+
+
+" ######### Markdown toc ##########
+
+let g:vmt_cycle_list_item_markers = 1
+let g:vmt_fence_text = 'TOC'
+let g:vmt_fence_closing_text = '/TOC'
 
 
 " ######### Markdown img ##########
@@ -758,7 +718,7 @@ let g:vim_markdown_conceal = 0
 
 
 " ######### Ruby ##########
-let g:ruby_host_prog = '/home/wgc/.gem/ruby/2.7.0/bin/neovim-ruby-host'
+" let g:ruby_host_prog = '/home/wgc/.gem/ruby/2.7.0/bin/neovim-ruby-host'
 
 
 
@@ -831,16 +791,16 @@ vmap <C-j> <Plug>(coc-snippets-select)
 "call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
 "call dein#add('neoclide/coc.nvim', {'merged':0, 'build': 'yarn install --frozen-lockfile'})
 
-autocmd FileType json syntax match Comment +\/\/.\+$+
-
-function! SetupCommandAbbrs(from, to)
-  exec 'cnoreabbrev <expr> '.a:from
-        \ .' ((getcmdtype() ==# ":" && getcmdline() ==# "'.a:from.'")'
-        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
-endfunction
-
-" Use C to open coc config
-call SetupCommandAbbrs('C', 'CocConfig')
+" autocmd FileType json syntax match Comment +\/\/.\+$+
+"
+" function! SetupCommandAbbrs(from, to)
+"   exec 'cnoreabbrev <expr> '.a:from
+"         \ .' ((getcmdtype() ==# ":" && getcmdline() ==# "'.a:from.'")'
+"         \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+" endfunction
+"
+" " Use C to open coc config
+" call SetupCommandAbbrs('C', 'CocConfig')
 
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -973,7 +933,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics.
@@ -995,13 +955,20 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 
 " ######### vimspector ##########
-
-nmap <F1> :VimspectorReset<CR>
-
-
 let g:vimspector_enable_mappings = 'HUMAN'
-nmap <F2> :call vimspector#StepInto()<CR>
-nmap <F3> :call vimspector#StepOut()<CR>
+" noremap <leader><F1> :VimspectorReset<CR>
+" noremap <F2> :call vimspector#StepInto()<CR>
+" noremap <F3> :call vimspector#StepOut()<CR>
+" noremap <F1> :call vimspector#StepOver()<CR>
+" noremap <F4> :call vimspector#Stop()<CR>
+" noremap <F5> :call vimspector#Continue()<CR>
+" noremap <F6> :call vimspector#Pause()<CR>
+" noremap <F7> :call vimspector#Restart()<CR>
+" noremap <F8> :call AddFunctionBreakpoint( '<cexpr>' )<CR>
+" noremap <leader><F9> :call vimspector#ToggleBreakpoint( { trigger expr, hit count expr } )<CR>
+" noremap <F9> :call vimspector#ToggleBreakpoint()<CR>
+
+
 function! s:read_template_into_buffer(template)
     " has to be a function to avoid the extra space fzf#run insers otherwise
     execute '0r ~/.config/nvim/sample_vimspector_json/'.a:template
@@ -1015,15 +982,25 @@ noremap <leader>vs :tabe .vimspector.json<CR>:LoadVimSpectorJsonTemplate<CR>
 sign define vimspectorBP text=☛ texthl=Normal
 sign define vimspectorBPDisabled text=☞ texthl=Normal
 sign define vimspectorPC text=🔶 texthl=SpellBad
-
-
+" noremap <F5> :!code %:h<cr>
 
 
 " ######### Async setting ##########
 
 let g:asyncrun_open = 6
 let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg']
-noremap <silent>sr :AsyncTask file-run<cr>
+
+" Compile function
+noremap sr :call CompileRunGcc()<CR>
+func! CompileRunGcc()
+    exec "w"
+    if expand("%:e") == 'md'
+        exec "MarkdownPreview"
+    else
+        exec "AsyncTask file-run"
+    endif
+endfunc
+
 noremap <silent>sb :AsyncTask make<cr>
 noremap <silent>ss :AsyncTask file-build<cr>
 " terminal mode: tab/curwin/top/bottom/left/right/quickfix/external
@@ -1092,17 +1069,18 @@ let g:ale_cpp_cppcheck_options = ''
 
 " " Width
 " Goyo 220
-"
 " " Height
 " Goyo x60
-"
 " " Both
 " Goyo 120x30
-"
 " " In percentage
 " Goyo 120x50%
-"
 " " With offsets
 " Goyo 0%x50%-25%
 
 noremap <leader>cg :Goyo 100%x100%<cr>
+
+
+" ######### Source List ##########
+
+" source ~/.config/nvim/base.vim
