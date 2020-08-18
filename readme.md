@@ -1,4 +1,4 @@
-This is my vim config
+# Prepare
 
 `sudo pacman -S discover archlinux-appstream-data packagekit-qt5 flatpak fwupd`
 
@@ -7,12 +7,39 @@ This is my vim config
 
 ~/.vim/plugged/vimspector/
 
-## 添加vim并共享配置为了使用完整版vimspector
+## For complete vimspector experience
 
-```
+```PowerShell
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 ln -s ~/.local/share/nvim/site ~/.vim
 ln -s .config/nvim/init.vim .vimrc
 ```
+
+## Shell settings
+
+### Ranger
+
+```PowerShell
+set -g -x RANGER_LOAD_DEFAULT_RC FALSE
+```
+
+### ruby
+
+```PowerShell
+set PATH /home/wgc/.gem/ruby/2.7.0/bin $PATH
+```
+
+### fzf
+
+```PowerShell
+# Defined in - @ line 1
+function fzf --description alias\ fzf\ fzf\ --preview\ \'head\ -100\ \{\}\'\n
+	command fzf --preview 'head -100 {}'  $argv;
+end
+
+export FZF_DEFAULT_OPTS='--height 60% --layout=reverse --border --preview-window=right'
+export FZF_DEFAULT_COMMAND='fd --hidden --follow -E ".git" -E "node_modules"'
+```
+
