@@ -91,9 +91,9 @@ let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 " ################# 状态栏设置 #####################
-
-map <leader>cs :set laststatus=2<cr>
-set laststatus=1
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+map <leader>cs :set laststatus=1<cr>
+set laststatus=2
 set t_Co=256      "在windows中用xshell连接打开vim可以显示色彩
 
 "共享剪贴板  
@@ -394,6 +394,7 @@ Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or 
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'junegunn/vim-peekaboo' " 双引号提示
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
 
 "====================
@@ -519,7 +520,11 @@ let g:airline_symbols.branch = '⎇'
 
 " 是否打开tabline
 let g:airline#extensions#tabline#enabled = 1
-
+let g:airline#extensions#coc#enabled = 0
+let airline#extensions#coc#error_symbol = 'Error:'
+let airline#extensions#coc#warning_symbol = 'Warning:'
+let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
+let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
 
 
 " ######### rainbow_parentheses ##########
@@ -669,7 +674,7 @@ let g:UltiSnipsEditSplit="vertical"
 
 " ######### MarkdownPreview Setting ##########
 let g:mkdp_auto_start = 0
-let g:mkdp_auto_close = 1
+let g:mkdp_auto_close = 0
 let g:mkdp_refresh_slow = 0
 let g:mkdp_command_for_global = 0
 let g:mkdp_open_to_the_world = 0
@@ -748,7 +753,8 @@ let g:coc_global_extensions = [
   \ 'coc-vimlsp',
   \ 'coc-vimlsp',
   \ 'coc-yaml',
-  \ 'coc-yank']
+  \ 'coc-yank',
+  \ 'coc-clangd']
 
 
   " \ 'coc-stylelint',
@@ -937,15 +943,15 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <space>a  :<C-u>CocList --normal -A diagnostics<cr>
 " Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent><nowait> <space>e  :<C-u>CocList --normal extensions<cr>
 " Show commands.
-nnoremap <silent><nowait> <space>m  :<C-u>CocList commands<cr>
+nnoremap <silent><nowait> <space>m  :<C-u>CocList --normal commands<cr>
 " Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent><nowait> <space>o  :<C-u>CocList --normal -A outline<cr>
 " Search workspace symbols.
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I -A symbols<cr>
 " Do default action for next item.
  nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
