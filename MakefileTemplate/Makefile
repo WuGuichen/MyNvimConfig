@@ -20,7 +20,7 @@ SRCDIR:=              # 除了当前目录外，其他的源代码文件目录
 # # Now alter any implicit rules' variables if you like, e.g.:
 
 CC:=g++
-CFLAGS := -g -Wall -O3
+CFLAGS := -g -Wall -O3 -std=c++17
 CPPFLAGS := $(CFLAGS)
 CPPFLAGS += $(addprefix -I,$(INCLUDES))
 CPPFLAGS += -MMD
@@ -30,6 +30,8 @@ CPPFLAGS += -MMD
 # # `File not found' error messages. If you are not using DOS at all,
 # # set the variable to something which will unquestioningly remove
 # # files.
+	# veryclean: clean
+	# @$(RM-F) $(EXECUTABLE)
 #
 
 RM-F := rm -f
@@ -55,10 +57,8 @@ objs : $(OBJS)
 clean :
 	@$(RM-F) *.o
 	@$(RM-F) *.d
-	veryclean: clean
-	@$(RM-F) $(EXECUTABLE)
 
-rebuild: veryclean all
+rebuild: clean all
 	ifneq ($(MISSING_DEPS),)
 $(MISSING_DEPS) :
 	@$(RM-F) $(patsubst %.d,%.o,$@)

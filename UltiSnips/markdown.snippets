@@ -116,7 +116,7 @@ snippet ilc "Inline Code" i
 endsnippet
 
 snippet cbl "Codeblock" bA
-\`\`\`${1:c++}
+\`\`\`${1:cpp}
 $0
 \`\`\`
 <++>
@@ -408,11 +408,6 @@ snippet xx "cross" Ai
 endsnippet
 
 context "math()"
-snippet Pw "power" Ai
-^{$0}<++>
-endsnippet
-
-context "math()"
 snippet norm "norm"
 \|$1\|$0
 endsnippet
@@ -434,7 +429,6 @@ context "math()"
 snippet '(?<!\\)(arcsin|arccos|arctan|arccot|arccsc|arcsec|pi|zeta|int)' "ln" rwA
 \\`!p snip.rv = match.group(1)`
 endsnippet
-
 
 priority 100
 context "math()"
@@ -822,21 +816,20 @@ snippet sp
 &emsp;
 endsnippet
 
-context "nomath()"
-snippet { "{}" A
-{$1}$0
-endsnippet
-
-context "nomath()"
-snippet [ "[]" A
-[$1]$0
-endsnippet
-
-context "nomath()"
-snippet ( "()" A
-($1)$0
-endsnippet
-
+# context "nomath()"
+# snippet { "{}" A
+# {$1}$0
+# endsnippet
+#
+# context "nomath()"
+# snippet [ "[]" A
+# [$1]$0
+# endsnippet
+#
+# context "nomath()"
+# snippet ( "()" A
+# ($1)$0
+# endsnippet
 
 
 priority 80
@@ -910,10 +903,10 @@ endsnippet
 
 context "math()"
 snippet lrl "left| right|" iAw
-| $0|<++>
+|$0|<++>
 endsnippet
 
-snippet '(?<!\\)([0-9])([0-9])tb' "definele" rA
+snippet '(?<!\\)([0-9])([0-9])tb' "definele" ri
 $1`!p 
 x=match.group(1)
 y=match.group(2)

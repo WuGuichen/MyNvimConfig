@@ -91,9 +91,9 @@ let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 " ################# 状态栏设置 #####################
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-map <leader>cs :set laststatus=1<cr>
-set laststatus=2
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+map <leader>cs :set laststatus=2<cr>
+set laststatus=1
 set t_Co=256      "在windows中用xshell连接打开vim可以显示色彩
 
 "共享剪贴板  
@@ -249,6 +249,13 @@ Plug 'vim-airline/vim-airline'
 " Plug 'tyru/open-browser.vim'
 Plug 'aklt/plantuml-syntax'
 
+"=================
+"### For Unity ###
+"=================
+
+Plug 'OmniSharp/omnisharp-vim'
+Plug 'ctrlpvim/ctrlp.vim' , { 'for': ['cs', 'vim-plug'] } " omnisharp-vim dependency
+
 "=======================
 "### File navigation ###
 "=======================
@@ -355,8 +362,9 @@ Plug 'plasticboy/vim-markdown'
 "### theme ###
 "=============
 
-Plug 'joshdick/onedark.vim'
-" Plug 'crusoexia/vim-monokai'
+" Plug 'joshdick/onedark.vim'
+Plug 'KeitaNakamura/neodark.vim'
+Plug 'crusoexia/vim-monokai'
 " Plug 'connorholyday/vim-snazzy'
 " Plug 'tyrannicaltoucan/vim-quantum'
 
@@ -432,6 +440,7 @@ call plug#end()
 
 " ============================ setting ==================================
 
+autocmd VimEnter * source $MYVIMRC
 
 " ######### UML setting ##########
 
@@ -447,18 +456,6 @@ nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
 " By default timeoutlen is 1000 ms
 set timeoutlen=500
 
-" ######### theme ##########
-
-" set background=dark
-" set termguicolors
-" colorscheme quantum
-" let g:quantum_black=1
-" colorscheme quantum
-" let g:quantum_italics=1
-" let g:airline_theme='quantum'
-"
-" let g:airline_theme='onedark'
-" colorscheme onedark
 
 " ######### undotree ##########
 
@@ -484,7 +481,7 @@ let NERDTreeWinSize=31
 " 在终端启动vim时，共享NERDTree
 let g:nerdtree_tabs_open_on_console_startup=1
 " 忽略一下文件的显示
-let NERDTreeIgnore=['\.pyc','\~$','\.swp']
+let NERDTreeIgnore=['\.pyc','\~$','\.swp', '\.meta']
 " 显示书签列表
 let NERDTreeShowBookmarks=1
 
@@ -569,8 +566,8 @@ let g:auto_save_events = ["InsertLeave", "TextChanged", "TextChangedI", "CursorH
 autocmd filetype tex setl updatetime=1000
 let g:livepreview_previewer = 'zathura'
 autocmd filetype tex :LLPStartPreview
-nmap <F6> :LLPStartPreview<CR>
-imap <F6> <ESC>:LLPStartPreview<CR>
+" nmap <F6> :LLPStartPreview<CR>
+" imap <F6> <ESC>:LLPStartPreview<CR>
 
 let g:livepreview_engine = 'xelatex'
 let g:vimtex_compiler_progname = 'nvr'
@@ -729,6 +726,8 @@ let g:vim_markdown_conceal = 0
 
 " ######### coc-setting ##########
 
+autocmd FileType markdown let b:coc_pairs_disabled = ['<', '`']
+
 let g:coc_global_extensions = [
   \ 'coc-actions',
   \ 'coc-css',
@@ -772,6 +771,15 @@ vmap <Leader>t <Plug>(coc-translator-pv)
 " nmap <Leader>r <Plug>(coc-translator-r)
 " nmap <Leader>r <Plug>(coc-translator-rv)
 
+
+" ######### coc-bookmark ##########
+
+" Example configuration
+nmap <Leader>bl <Plug>(coc-bookmark-next)
+nmap <Leader>bh <Plug>(coc-bookmark-prev)
+nmap <Leader>bt <Plug>(coc-bookmark-toggle)
+nmap <Leader>ba <Plug>(coc-bookmark-annotate)
+nnoremap <silent><nowait> <space>bb  :<C-u>CocList --normal -A bookmark<cr>
 
 
 " ######### coc-snippets ##########
@@ -1008,6 +1016,7 @@ func! CompileRunGcc()
 endfunc
 
 noremap <silent>sb :AsyncTask make<cr>
+noremap <silent>sB :AsyncTask make-clean<cr>
 noremap <silent>ss :AsyncTask file-build<cr>
 " terminal mode: tab/curwin/top/bottom/left/right/quickfix/external
 let g:asynctasks_term_pos = 'right'
@@ -1066,7 +1075,7 @@ let g:ale_lint_on_insert_leave = 1
 let g:airline#extensions#ale#enabled = 1
 
 let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
-let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
+let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++17'
 let g:ale_c_cppcheck_options = ''
 let g:ale_cpp_cppcheck_options = ''
 
@@ -1084,9 +1093,91 @@ let g:ale_cpp_cppcheck_options = ''
 " " With offsets
 " Goyo 0%x50%-25%
 
-noremap <leader>cg :Goyo 100%x100%<cr>
+noremap <leader>cg :Goyo 100%x100%-40%<cr>
 
 
 " ######### Source List ##########
 
 " source ~/.config/nvim/base.vim
+
+" ######### OmniSharp setting ##########
+
+" let g:OmniSharp_typeLookupInPreview = 1
+" let g:omnicomplete_fetch_full_documentation = 1
+" let g:OmniSharp_server_path = '/home/wgc/omnisharp/omnisharp.http-linux-x64/run'
+let g:OmniSharp_server_use_mono = 1
+let g:OmniSharp_server_stdio = 1
+let g:OmniSharp_highlight_types = 2
+let g:OmniSharp_selector_ui = 'ctrlp'
+let g:ctrlp_cmd = 'CtrlP'
+
+let g:ale_linters = {
+\ 'cs': ['OmniSharp']
+\}
+
+
+autocmd Filetype cs nnoremap <buffer> gd :OmniSharpGotoDefinition<CR>
+autocmd Filetype cs nnoremap <buffer> gr :OmniSharpFindUsages<CR>
+autocmd Filetype cs nnoremap <buffer> gy :OmniSharpTypeLookup<CR>
+autocmd Filetype cs nnoremap <buffer> ga :OmniSharpGetCodeActions<CR>
+autocmd Filetype cs nnoremap <buffer> <LEADER>rn :OmniSharpRename<CR><C-N>:res +5<CR>
+" autocmd FileType cs nnoremap <silent> <buffer> <Leader>f <Plug>(omnisharp_code_format)
+" Contextual code actions (uses fzf, CtrlP or unite.vim selector when available)
+autocmd FileType cs nnoremap <silent> <buffer> <Leader>a <Plug>(omnisharp_code_actions)
+autocmd FileType cs xmap <silent> <buffer> <Leader>a <Plug>(omnisharp_code_actions)
+
+sign define OmniSharpCodeActions text=💡
+augroup OSCountCodeActions
+    autocmd!
+    autocmd FileType cs set signcolumn=yes
+    autocmd CursorHold *.cs call OmniSharp#actions#codeactions#Count()
+augroup END
+
+function! OSCountCodeActions() abort
+    if bufname('%') ==# '' || OmniSharp#FugitiveCheck() | return | endif
+    if !OmniSharp#IsServerRunning() | return | endif
+    let opts = {
+                \ 'CallbackCount': function('s:CBReturnCount'),
+                \ 'CallbackCleanup': {-> execute('sign unplace 99')}
+                \}
+    call OmniSharp#CountCodeActions(opts)
+endfunction
+
+function! s:CBReturnCount(count) abort
+    if a:count
+        let l = getpos('.')[1]
+        let f = expand('%:p')
+        execute ':sign place 99 line='.l.' name=OmniSharpCodeActions file='.f
+    endif
+endfunction
+
+
+" ######### theme ##########
+
+" set background=dark
+" colorscheme monokai
+" set termguicolors
+" set t_Co=256  " vim-monokai now only support 256 colours in terminal.
+" let g:monokai_term_italic = 1
+" let g:monokai_gui_italic = 1
+" colorscheme quantum
+" let g:quantum_black=1
+" colorscheme quantum
+" let g:quantum_italics=1
+" let g:airline_theme='quantum'
+
+
+" let g:airline_theme='onedark'
+" colorscheme onedark
+" let g:onedark_termcolors=256
+" let g:onedark_terminal_italics = 1
+
+colorscheme neodark
+let g:neodark#use_256color = 1
+" default: 0
+let g:neodark#background = '#202020'
+let g:neodark#solid_vertsplit = 0
+let g:lightline = {}
+let g:lightline.colorscheme = 'neodark'
+let g:neodark#terminal_transparent = 1
+
