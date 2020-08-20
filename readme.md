@@ -43,3 +43,9 @@ export FZF_DEFAULT_OPTS='--height 60% --layout=reverse --border --preview-window
 export FZF_DEFAULT_COMMAND='fd --hidden --follow -E ".git" -E "node_modules"'
 ```
 
+### omnisharp(unity)
+
+```PowerShell
+sudo pacman -S mono dotnet-host dotnet-runtime dotnet-sdk
+```
+
