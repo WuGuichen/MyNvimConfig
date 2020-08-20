@@ -1,8 +1,6 @@
 # Prepare
 
-`sudo pacman -S discover archlinux-appstream-data packagekit-qt5 flatpak fwupd`
 
-`sudo npm install tslib neovim log4js socket.io msgpack-lite`
 
 
 ~/.vim/plugged/vimspector/
@@ -18,6 +16,14 @@ ln -s .config/nvim/init.vim .vimrc
 ```
 
 ## Shell settings
+
+### Discover
+
+`sudo pacman -S discover archlinux-appstream-data packagekit-qt5 flatpak fwupd`
+
+### MarkdownPreview
+
+`sudo npm install tslib neovim log4js socket.io msgpack-lite`
 
 ### Ranger
 
