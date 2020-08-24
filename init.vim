@@ -253,15 +253,15 @@ Plug 'aklt/plantuml-syntax'
 "### For Unity ###
 "=================
 
-Plug 'OmniSharp/omnisharp-vim'
+Plug 'OmniSharp/omnisharp-vim', { 'for': ['cs']}
 Plug 'ctrlpvim/ctrlp.vim' , { 'for': ['cs', 'vim-plug'] } " omnisharp-vim dependency
 
 "=======================
 "### File navigation ###
 "=======================
 
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 " Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " enhance devicons
 
@@ -468,39 +468,39 @@ nnoremap <leader>u :UndotreeToggle<cr>
 
 " ######### nerdtree ##########
 
-nmap st : NERDTreeToggle<CR>
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-" 显示行号
-let NERDTreeShowLineNumbers=1
-let NERDTreeAutoCenter=1
-" 是否显示隐藏文件
-let NERDTreeShowHidden=1
-" 设置宽度
-let NERDTreeWinSize=31
-" 在终端启动vim时，共享NERDTree
-let g:nerdtree_tabs_open_on_console_startup=1
-" 忽略一下文件的显示
-let NERDTreeIgnore=['\.pyc','\~$','\.swp', '\.meta']
-" 显示书签列表
-let NERDTreeShowBookmarks=1
-
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ "Unknown"   : "?"
-    \ }
+" nmap st : NERDTreeToggle<CR>
+" let g:NERDTreeDirArrowExpandable = '▸'
+" let g:NERDTreeDirArrowCollapsible = '▾'
+" " 显示行号
+" let NERDTreeShowLineNumbers=1
+" let NERDTreeAutoCenter=1
+" " 是否显示隐藏文件
+" let NERDTreeShowHidden=1
+" " 设置宽度
+" let NERDTreeWinSize=31
+" " 在终端启动vim时，共享NERDTree
+" let g:nerdtree_tabs_open_on_console_startup=1
+" " 忽略一下文件的显示
+" let NERDTreeIgnore=['\.pyc','\~$','\.swp', '\.meta']
+" " 显示书签列表
+" let NERDTreeShowBookmarks=1
+"
+" let g:NERDTreeIndicatorMapCustom = {
+"     \ "Modified"  : "✹",
+"     \ "Staged"    : "✚",
+"     \ "Untracked" : "✭",
+"     \ "Renamed"   : "➜",
+"     \ "Unmerged"  : "═",
+"     \ "Deleted"   : "✖",
+"     \ "Dirty"     : "✗",
+"     \ "Clean"     : "✔︎",
+"     \ "Unknown"   : "?"
+"     \ }
 
 " ######### Tag list/ tagbar ##########
 
 let g:tagbar_width=30
-    nnoremap <silent> T :TagbarOpenAutoClose<CR> " 将tagbar的开关按键设置为 F4
+nnoremap <silent> T :TagbarOpenAutoClose<CR> " 将tagbar的开关按键设置为 F4
 
 
 " ######### airline ##########
@@ -558,7 +558,7 @@ au Syntax * RainbowParenthesesLoadBraces
 
 "自动保存
 let g:auto_save = 1
-let g:auto_save_events = ["InsertLeave", "TextChanged", "TextChangedI", "CursorHoldI", "CompleteDone"]
+let g:auto_save_events = ["InsertLeave", "TextChanged", "TextChangedI", "CompleteDone"]
 " autocmd TextChanged,TextChangedI <buffer> silent write
 
 " ######### LaTeX ##########
@@ -717,6 +717,7 @@ let g:tex_conceal = ""
 let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_conceal = 0
+let g:vim_markdown_fenced_languages = ['csharp=cs' ]
 
 
 " ######### Ruby ##########
@@ -727,6 +728,7 @@ let g:vim_markdown_conceal = 0
 " ######### coc-setting ##########
 
 autocmd FileType markdown let b:coc_pairs_disabled = ['<', '`']
+" autocmd FileType cs let b:coc_pairs_disabled = ['<', '`']
 
 let g:coc_global_extensions = [
   \ 'coc-actions',
@@ -781,6 +783,51 @@ nmap <Leader>bt <Plug>(coc-bookmark-toggle)
 nmap <Leader>ba <Plug>(coc-bookmark-annotate)
 nnoremap <silent><nowait> <space>bb  :<C-u>CocList --normal -A bookmark<cr>
 
+
+" ######### coc-explorer ##########
+
+:nmap st :CocCommand explorer --width 30<CR>
+
+let g:coc_explorer_global_presets = {
+\   '.vim': {
+\     'root-uri': '~/.vim',
+\   },
+\   'tab': {
+\     'position': 'tab',
+\     'quit-on-open': v:true,
+\   },
+\   'floating': {
+\     'position': 'floating',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingTop': {
+\     'position': 'floating',
+\     'floating-position': 'center-top',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingLeftside': {
+\     'position': 'floating',
+\     'floating-position': 'left-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingRightside': {
+\     'position': 'floating',
+\     'floating-position': 'right-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'simplify': {
+\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+\   }
+\ }
+
+" Use preset argument to open it
+nmap <space>id :CocCommand explorer --preset .vim<CR>
+nmap <space>if :CocCommand explorer --preset floating<CR>
+
+" List all presets
+nmap <space>il :CocList explPresets
 
 " ######### coc-snippets ##########
 
@@ -1010,6 +1057,8 @@ func! CompileRunGcc()
     exec "w"
     if expand("%:e") == 'md'
         exec "MarkdownPreview"
+    elseif expand("%:e") == 'cs'
+        exec "OmniSharpFixUsings"
     else
         exec "AsyncTask file-run"
     endif
@@ -1100,6 +1149,31 @@ noremap <leader>cg :Goyo 100%x100%-40%<cr>
 
 " source ~/.config/nvim/base.vim
 
+
+" ######### CtrlP setting ##########
+
+let g:ctrlp_mruf_max = 250
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_root_markers = ['.sln']
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll|meta)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+function! s:setcwd()
+  let cph = expand('%:p:h', 1)
+  if cph =~ '^.\+://' | retu | en
+  for mkr in ['.git/', '.hg/', '.svn/', '.bzr/', '_darcs/', '.vimprojects']
+    let wd = call('find'.(mkr =~ '/$' ? 'dir' : 'file'), [mkr, cph.';'])
+    if wd != '' | let &acd = 0 | brea | en
+  endfo
+  exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
+endfunction
+
+autocmd BufEnter * call s:setcwd()
 " ######### OmniSharp setting ##########
 
 " let g:OmniSharp_typeLookupInPreview = 1
@@ -1108,23 +1182,25 @@ noremap <leader>cg :Goyo 100%x100%-40%<cr>
 let g:OmniSharp_server_use_mono = 1
 let g:OmniSharp_server_stdio = 1
 let g:OmniSharp_highlight_types = 2
-let g:OmniSharp_selector_ui = 'ctrlp'
-let g:ctrlp_cmd = 'CtrlP'
+let g:OmniSharp_selector_ui = 'fzf'
+
 
 let g:ale_linters = {
 \ 'cs': ['OmniSharp']
 \}
 
-
-autocmd Filetype cs nnoremap <buffer> gd :OmniSharpGotoDefinition<CR>
-autocmd Filetype cs nnoremap <buffer> gr :OmniSharpFindUsages<CR>
+" autocmd CursorHold *.cs OmniSharpTypeLookup
+autocmd FileType cs nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
+" autocmd Filetype cs nnoremap <buffer> gr :OmniSharpFindUsages<CR>
 autocmd Filetype cs nnoremap <buffer> gy :OmniSharpTypeLookup<CR>
 autocmd Filetype cs nnoremap <buffer> ga :OmniSharpGetCodeActions<CR>
 autocmd Filetype cs nnoremap <buffer> <LEADER>rn :OmniSharpRename<CR><C-N>:res +5<CR>
-" autocmd FileType cs nnoremap <silent> <buffer> <Leader>f <Plug>(omnisharp_code_format)
+autocmd FileType cs nnoremap <silent> <buffer> <Leader>f :OmniSharpCodeFormat<CR>
 " Contextual code actions (uses fzf, CtrlP or unite.vim selector when available)
 autocmd FileType cs nnoremap <silent> <buffer> <Leader>a <Plug>(omnisharp_code_actions)
 autocmd FileType cs xmap <silent> <buffer> <Leader>a <Plug>(omnisharp_code_actions)
+autocmd FileType cs nmap <silent> <buffer> gr <Plug>(omnisharp_find_usages)
+autocmd FileType cs nmap <silent> <buffer> K <Plug>(omnisharp_documentation)
 
 sign define OmniSharpCodeActions text=💡
 augroup OSCountCodeActions

@@ -1,0 +1,33 @@
+snippet tooltip "tooptip" b
+[Tooltip("$0")]
+endsnippet
+
+snippet summary "summary" b
+///<summary>$0</summary>
+endsnippet
+
+snippet using "head" b
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ${1:fileName} : Monobehavi
+endsnippet
+
+snippet funp "publicFunction" b
+public ${1:funcName}()
+{
+    $0
+}
+endsnippet
+
+snippet param "param description" i
+<param name=${1:paramName}>$0</param>
+endsnippet
+
+snippet awake "Awake" i
+private void Awake()
+{
+    $0
+}
+endsnippet
