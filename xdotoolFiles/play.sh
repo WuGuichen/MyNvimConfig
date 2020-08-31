@@ -13,3 +13,8 @@
 # xdotool key Alt+Tab
 
 xdotool key Alt+P
+# xdotool key Alt+Tab
+# sleep 0.1
+# xdotool key Ctrl+d
+# sleep 0.1
+# xdotool key Alt+Tab

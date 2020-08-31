@@ -1,4 +1,6 @@
+
 {
+    
     // diagnostic-languageserver
     "diagnostic-languageserver.filetypes": {
         "vim": "vint",
@@ -8,14 +10,6 @@
         "elixir": ["mix_credo", "mix_credo_compile"],
         "eelixir": ["mix_credo", "mix_credo_compile"],
         "php": ["phpstan", "psalm"]
-    },
-    "diagnostic-languageserver.formatFiletypes": {
-        "dart": "dartfmt",
-        "elixir": "mix_format",
-        "eelixir": "mix_format",
-        "lua": "lua-format",
-        "sh": "shfmt",
-        "blade": "blade-formatter"
     },
     "explorer.keyMappings": {
         "i": false, // cancel default mapkey
@@ -91,8 +85,9 @@
     "coc.preferences.extensionUpdateCheck": "daily",
     "coc.preferences.messageLevel": "error",
     "suggest.detailMaxLength": 60,
-    "suggest.noselect": true,
-    "suggest.enablePreselect": false,
+
+    "suggest.noselect": false,
+    "suggest.enablePreselect": true,
     "suggest.triggerAfterInsertEnter": false,
     "suggest.timeout": 5000,
     "suggest.enablePreview": true,
@@ -133,7 +128,7 @@
     "diagnostic.warningSign": "\uf071",
     "diagnostic.infoSign": "\uf129",
     "diagnostic.hintSign": "\uf864",
-    "diagnostic.displayByAle": false,
+    "diagnostic.displayByAle": true,
     "diagnostic.refreshOnInsertMode": false,
     "diagnostic.refreshAfterSave": false,
     "diagnostic.checkCurrentLine": true,
@@ -141,11 +136,10 @@
     "diagnostic.virtualText": true,
     "codeLens.enable": true,
     "list.previewHighlightGroup": "Statement",
-    "list.nextKeymap": "<C-e>",
-    "list.previousKeymap": "<C-u>",
+    "list.nextKeymap": "<C-j>",
+    "list.previousKeymap": "<C-k>",
     "snippets.ultisnips.directories": [
-        "$HOME/.config/nvim/Ultisnips/",
-        "$HOME/.config/nvim/plugged/vim-snippets/UltiSnips/"
+        "$HOME/.config/nvim/Ultisnips/"
     ],
     "coc.preferences.formatOnSaveFiletypes": [],
     "yaml.format.enable": true,
@@ -181,8 +175,7 @@
             "a",
             "obj",
             "pyc",
-            "meta",
-            "cs.meta"
+            "meta"
         ],
         "filenames": [],
         "patternMatches": [

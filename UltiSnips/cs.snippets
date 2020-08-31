@@ -31,3 +31,38 @@ private void Awake()
     $0
 }
 endsnippet
+
+snippet lateupdate "LateUpdate" i
+private void LateUpdate()
+{
+    $0
+}
+endsnippet
+
+snippet fixedupdate "FixedUpdate" i
+private void FixedUpdate()
+{
+    $0
+}
+endsnippet
+
+snippet void "void function" i
+${1:public} void ${2:funcName} (${3:Param})
+{
+    $0
+}
+endsnippet
+
+snippet vv "virtual void" i
+${1:public} virtual void ${2:funcName} (${3:Param})
+{
+    $0
+}
+endsnippet
+
+snippet std "Using List" i
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+$0
+endsnippet

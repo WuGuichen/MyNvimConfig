@@ -6,7 +6,7 @@
 " ######### 大括号自动换行 ##########
 
 " 大括号自动分行, C/C++下的自动命令, 添加到 .vimrc
-autocmd BufWritePre,BufRead *.c :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
+autocmd BufWritePre,BufRead *.cs :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
 autocmd BufWritePre,BufRead *.cpp :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
 " autocmd BufEnter *.cpp :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
 
@@ -168,6 +168,10 @@ map sj :set splitbelow<CR>:split<CR>
 map sV <C-w>t<C-w>H
 map sH <C-w>t<C-w>K
 
+map sc byw
+map sp bcw<ESC>"0p
+map sP bcw<ESC>+0p
+
 map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
 imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
 
@@ -178,6 +182,9 @@ imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
 
+imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+" imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+" nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
 
 
 noremap <LEADER><CR> :nohlsearch<CR>
@@ -288,7 +295,8 @@ Plug 'w0rp/ale'
 " Or build from source code by using yarn: https://yarnpkg.com
 " Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'neoclide/coc-jedi', {'do': 'yarn install'}
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 "===================
 "### auto format ###
@@ -409,7 +417,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 "### Dependencies ###
 "====================
 
-Plug 'ferrine/md-img-paste.vim'
+" Plug 'ferrine/md-img-paste.vim'
 Plug '907th/vim-auto-save'
 
 
@@ -516,6 +524,7 @@ let g:airline_symbols.linenr = '¶'
 let g:airline_symbols.branch = '⎇'
 
 " 是否打开tabline
+inoremap <silent><expr> <c-y> coc#refresh()
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#coc#enabled = 0
 let airline#extensions#coc#error_symbol = 'Error:'
@@ -618,12 +627,11 @@ let g:mkdp_delay_start_browser = 800
 "let g:mkdp_delay_auto_refresh = 3000
 
 
-
-"UltiSnips 设置tab键为触发键
-
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+" "UltiSnips 设置tab键为触发键
+"
+" let g:UltiSnipsExpandTrigger="<c-j>"
+" let g:UltiSnipsJumpForwardTrigger="<c-j>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 
 "设置打开配置文件时为垂直打开
@@ -708,7 +716,7 @@ let g:mdip_imgdir = 'pic'
 "设置默认图片名称。当图片名称没有给出时，使用默认图片名称
 let g:mdip_imgname = 'image'
 "设置快捷键，个人喜欢 Ctrl+p 的方式，比较直观
-autocmd FileType markdown nnoremap <silent> <C-p> :call mdip#MarkdownClipboardImage()<CR>F%i
+autocmd FileType markdown nnoremap <silent> <leader>p  :call mdip#MarkdownClipboardImage()<CR>
 
 
 " ######### Vim Markdown setting ##########
@@ -781,50 +789,13 @@ nmap <Leader>bl <Plug>(coc-bookmark-next)
 nmap <Leader>bh <Plug>(coc-bookmark-prev)
 nmap <Leader>bt <Plug>(coc-bookmark-toggle)
 nmap <Leader>ba <Plug>(coc-bookmark-annotate)
-nnoremap <silent><nowait> <space>bb  :<C-u>CocList --normal -A bookmark<cr>
+vnoremap <silent><nowait> <space>bb c****<ESC>hhp
 
 
 " ######### coc-explorer ##########
 
 :nmap st :CocCommand explorer --width 30<CR>
 
-let g:coc_explorer_global_presets = {
-\   '.vim': {
-\     'root-uri': '~/.vim',
-\   },
-\   'tab': {
-\     'position': 'tab',
-\     'quit-on-open': v:true,
-\   },
-\   'floating': {
-\     'position': 'floating',
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'floatingTop': {
-\     'position': 'floating',
-\     'floating-position': 'center-top',
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'floatingLeftside': {
-\     'position': 'floating',
-\     'floating-position': 'left-center',
-\     'floating-width': 50,
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'floatingRightside': {
-\     'position': 'floating',
-\     'floating-position': 'right-center',
-\     'floating-width': 50,
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'simplify': {
-\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
-\   }
-\ }
-
-" Use preset argument to open it
-nmap <space>id :CocCommand explorer --preset .vim<CR>
-nmap <space>if :CocCommand explorer --preset floating<CR>
 
 " List all presets
 nmap <space>il :CocList explPresets
@@ -832,36 +803,24 @@ nmap <space>il :CocList explPresets
 " ######### coc-snippets ##########
 
 " Use <C-l> for trigger snippet expand.
-imap <C-l> <Plug>(coc-snippets-expand)
+imap <C-j> <Plug>(coc-snippets-expand)
 
 " Use <C-j> for select text for visual placeholder of snippet.
 vmap <C-j> <Plug>(coc-snippets-select)
 
 " Use <C-j> for jump to next placeholder, it's default of coc.nvim
-" let g:coc_snippet_next = '<c-j>'
+let g:coc_snippet_next = '<c-j>'
 
 " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-" let g:coc_snippet_prev = '<c-k>'
+let g:coc_snippet_prev = '<c-k>'
 
 " Use <C-j> for both expand and jump (make expand higher priority.)
-" imap <c-j> <Plug>(coc-snippets-expand-jump)
+imap <c-j> <Plug>(coc-snippets-expand-jump)
 
+let g:snips_author = 'wgc'
 
 
 " ######### coc setting ##########
-"call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
-"call dein#add('neoclide/coc.nvim', {'merged':0, 'build': 'yarn install --frozen-lockfile'})
-
-" autocmd FileType json syntax match Comment +\/\/.\+$+
-"
-" function! SetupCommandAbbrs(from, to)
-"   exec 'cnoreabbrev <expr> '.a:from
-"         \ .' ((getcmdtype() ==# ":" && getcmdline() ==# "'.a:from.'")'
-"         \ .'? ("'.a:to.'") : ("'.a:from.'"))'
-" endfunction
-"
-" " Use C to open coc config
-" call SetupCommandAbbrs('C', 'CocConfig')
 
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -875,11 +834,10 @@ set cmdheight=1
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=300
+set updatetime=100
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
-
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("patch-8.1.1564")
@@ -898,18 +856,16 @@ inoremap <silent><expr> <TAB>
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:checunction_name()
-    " code
-endf
 " Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-h> coc#refresh()
+
+inoremap <silent><expr> zi coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
 if exists('*complete_info')
   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
+else
   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
@@ -928,7 +884,7 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> <space>; :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -939,7 +895,7 @@ function! s:show_documentation()
 endfunction
 
 " Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
@@ -956,11 +912,16 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
+" " Applying codeAction to the selected region.
+" " Example: `<leader>aap` for current paragraph
+" xmap <leader>a  <Plug>(coc-codeaction-selected)
+" nmap <leader>a  <Plug>(coc-codeaction-selected)
+" Remap for do codeAction of selected region
+function! s:cocActionsOpenFromSelected(type) abort
+  execute 'CocCommand actions.open ' . a:type
+endfunction
+xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
@@ -998,7 +959,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList --normal -A diagnostics<cr>
+nnoremap <silent><nowait> <space>d  :<C-u>CocList --normal -A diagnostics<cr>
 " Manage extensions.
 nnoremap <silent><nowait> <space>e  :<C-u>CocList --normal extensions<cr>
 " Show commands.
@@ -1008,11 +969,11 @@ nnoremap <silent><nowait> <space>o  :<C-u>CocList --normal -A outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I -A symbols<cr>
 " Do default action for next item.
- nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+"  nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" " Do default action for previous item.
+" nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 
 " ######### vimspector ##########
