@@ -21,7 +21,7 @@ snippet sec "section" b
 // ============== $0 ================
 endsnippet 
 
-snippet cin "My cin" b
+snippet cin "My cin" i
 cin >> $0;
 endsnippet 
 
@@ -29,3 +29,60 @@ snippet vector "My vector" b
 vector<${1:char}> ${2:v}$0;
 endsnippet
 
+snippet !""!
+printf("${1:%s}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
+endsnippet
+
+snippet t "tt " i
+<tag>${VISUAL:inside text/should/is/g}</tag>
+endsnippet
+
+snippet today
+Today is `#!/usr/bin/perl
+@a = localtime(); print $a[3] . '.' . $a[4] . '.' . ($a[5]+1900);`.
+endsnippet
+
+snippet wo
+${1:Text}`!p snip.rv = (75-2*len(t[1]))*' '+t[1].upper()`
+endsnippet
+
+snippet "be(gin)?( (\S+))?" "begin{} / end{}" br
+\begin{${1:`!p
+snip.rv = match.group(3) if match.group(2) is not None else "something"`}}
+    ${2:${VISUAL}}
+\end{$1}$0
+endsnippet
+
+snippet "(\w+)pa" "Parenthesis (postfix)" r
+(`!p snip.rv = match.group(1)`$1)$0
+endsnippet
+
+snippet "([^\s].*)re" "Return (postfix)" r
+return `!p snip.rv = match.group(1)`$0
+endsnippet
+
+global !p
+def upper_right(inp):
+    return (75 - 2 * len(inp))*' ' + inp.upper()
+endglobal
+
+snippet wow
+${1:Text}`!p snip.rv = upper_right(t[1])`
+endsnippet
+
+snippet title "Title transformation"
+${1:a text}
+${1/\w+\s*/\u$0/}
+endsnippet
+
+snippet i "if ..." b
+if $1 {
+    $2
+}
+endsnippet
+
+snippet i "if err != nil" "re.match('^\s+[^=]*err\s*:?=', snip.buffer[snip.line-1])" be
+if err != nil {
+    $1
+}
+endsnippet

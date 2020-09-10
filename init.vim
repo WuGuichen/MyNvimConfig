@@ -6,8 +6,7 @@
 " ######### 大括号自动换行 ##########
 
 " 大括号自动分行, C/C++下的自动命令, 添加到 .vimrc
-autocmd BufWritePre,BufRead *.cs :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
-autocmd BufWritePre,BufRead *.cpp :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
+autocmd BufWritePre,BufRead *.cs,*.md,.*cpp :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
 " autocmd BufEnter *.cpp :inoremap <Enter> <c-r>=BracketsEnter('}')<CR>
 
 function BracketsEnter(char)
@@ -200,7 +199,7 @@ map <down> :res -3<CR>
 map <left> :vertical resize -3<CR>
 map <right> :vertical resize +3<CR>
 
-map tt :tabe<CR>
+map ta :tabe<CR>
 map th :-tabnext<CR>
 map tl :+tabnext<CR>
 
@@ -296,7 +295,7 @@ Plug 'w0rp/ale'
 " Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'neoclide/coc-jedi', {'do': 'yarn install'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc.nvim, {'do': 'yarn install --frozen-lockfile'}
 
 "===================
 "### auto format ###
@@ -629,6 +628,7 @@ let g:mkdp_delay_start_browser = 800
 
 " "UltiSnips 设置tab键为触发键
 "
+
 " let g:UltiSnipsExpandTrigger="<c-j>"
 " let g:UltiSnipsJumpForwardTrigger="<c-j>"
 " let g:UltiSnipsJumpBackwardTrigger="<c-k>"
@@ -772,8 +772,8 @@ let g:coc_global_extensions = [
 " ######### coc-translator ##########
 
 " popup
-nmap <Leader>t <Plug>(coc-translator-p)
-vmap <Leader>t <Plug>(coc-translator-pv)
+nmap tt <Plug>(coc-translator-p)
+vmap tt <Plug>(coc-translator-pv)
 " echo
 " nmap <Leader>e <Plug>(coc-translator-e)
 " nmap <Leader>e <Plug>(coc-translator-ev)
@@ -790,6 +790,9 @@ nmap <Leader>bh <Plug>(coc-bookmark-prev)
 nmap <Leader>bt <Plug>(coc-bookmark-toggle)
 nmap <Leader>ba <Plug>(coc-bookmark-annotate)
 vnoremap <silent><nowait> <space>bb c****<ESC>hhp
+vnoremap <silent><nowait> <space>br c<b><font color=#FF0000 size=4></font></b><ESC>F4lp
+
+
 
 
 " ######### coc-explorer ##########
@@ -854,8 +857,19 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? coc#_select_confirm() :
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
 
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" let g:coc_snippet_next = '<C-j>'
 " Use <c-space> to trigger completion.
 
 inoremap <silent><expr> zi coc#refresh()
@@ -866,7 +880,7 @@ inoremap <silent><expr> zi coc#refresh()
 if exists('*complete_info')
   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 " inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
@@ -1024,10 +1038,19 @@ func! CompileRunGcc()
         exec "AsyncTask file-run"
     endif
 endfunc
+noremap ss :call CompileBuildGcc()<CR>
+func! CompileBuildGcc()
+    exec "w"
+    if expand("%:e") == 'cpp'
+        exec "AsyncTask file-build"
+    elseif expand("%:e") == 'md'
+        exec "CocDisable"
+    endif
+endfunc
 
 noremap <silent>sb :AsyncTask make<cr>
 noremap <silent>sB :AsyncTask make-clean<cr>
-noremap <silent>ss :AsyncTask file-build<cr>
+" noremap <silent>ss :AsyncTask file-build<cr>
 " terminal mode: tab/curwin/top/bottom/left/right/quickfix/external
 let g:asynctasks_term_pos = 'right'
 
@@ -1143,7 +1166,7 @@ autocmd BufEnter * call s:setcwd()
 let g:OmniSharp_server_use_mono = 1
 let g:OmniSharp_server_stdio = 1
 let g:OmniSharp_highlight_types = 2
-let g:OmniSharp_selector_ui = 'fzf'
+let g:OmniSharp_selector_ui = 'ctrlp'
 
 
 let g:ale_linters = {

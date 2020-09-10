@@ -88,7 +88,7 @@ snippet * "italics"
 *${1:${VISUAL}}*$0
 endsnippet
 
-snippet ** "bold"
+snippet ** "bold" i
 **${1:${VISUAL}}**$0
 endsnippet
 
@@ -317,6 +317,11 @@ snippet '([A-Za-z])_(\d\d)' "auto subscript2" wrA
 endsnippet
 
 context "math()"
+snippet '([A-Za-z])_([A-Za-z]{2})' "auto subscript2" wrA
+`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`}
+endsnippet
+
+context "math()"
 snippet == "equals"
 &= $1 \\\\
 endsnippet
@@ -350,7 +355,6 @@ priority 100
 context "math()"
 snippet ^^ "upper" Ai
 ^{$1}$0
-endsnippet
 
 context "math()"
 snippet ,p "partial" Ai
@@ -374,12 +378,12 @@ snippet rij "mrij" i
 endsnippet
 
 context "math()"
-snippet <= "leq" 
+snippet <= "leq" Ai
 \le 
 endsnippet
 
 context "math()"
-snippet >= "geq" 
+snippet >= "geq" Ai
 \ge 
 endsnippet
 
@@ -805,7 +809,7 @@ endsnippet
 ##############
 snippet title "title"
 <head><style>div.solid {border-style:solid;}</style></head>
-<b><font size="7">$1</font></b>
+<b><font size="4">$1</font></b>
 
 ------
 
@@ -898,8 +902,8 @@ snippet lrg "<>" iAw
 \left\langle $0\right \rangle<++>
 endsnippet
 
-snippet lrb "left\{ right\}" iAw
-{$1}$0
+snippet lrb "left\{ right\}" iA
+\\{$1\\}$0
 endsnippet
 
 snippet lre "left[ right]" iAw
@@ -928,9 +932,10 @@ snip.rv=out
 endsnippet
 
 snippet box "box" w
-<div class="solid">
+<style>div.${1:dashed}{background-color:#FFF9F9;padding:15px 20px;text-indent:30px;border-style:${1:dashed};border-width:1px;border-color:grey;}</style>
+<div class="${1:dashed}">
 
-$1
+$2
 
 </div>
 $0
@@ -963,6 +968,7 @@ class ${1:classname}{
 }
 endsnippet
 
+
 snippet class "A class include three member" b
 class ${1:classname} {
 __ public __
@@ -981,4 +987,29 @@ endsnippet
 
 snippet noteas "note as Nn" b
 note "<++>" as N${1:1}
+endsnippet
+
+snippet center "Center" b
+<center><font size=3></font></center>
+endsnippet
+
+snippet style "Style" b
+<style>
+div.dashed
+{
+border-style:dashed;
+border-width:1px;
+border-color:grey;
+}
+</style>
+endsnippet
+
+snippet fred "Description" i
+<b><font color=#FF0000 size=4>$1</font></b>$0
+endsnippet
+
+snippet python "Python Block" b
+```python
+$0
+```
 endsnippet

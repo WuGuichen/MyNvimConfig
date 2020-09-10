@@ -1,6 +1,5 @@
 
 {
-    
     // diagnostic-languageserver
     "diagnostic-languageserver.filetypes": {
         "vim": "vint",
@@ -79,15 +78,15 @@
                     "<<": "gitStage",
                     ">>": "gitUnstage"
     },
+    "markdownlint.config": {},
     "coc.preferences.hoverTarget": "preview",
     "coc.preferences.enableFloatHighlight": true,
     "coc.preferences.snippetStatusText": "Ⓢ ",
     "coc.preferences.extensionUpdateCheck": "daily",
     "coc.preferences.messageLevel": "error",
     "suggest.detailMaxLength": 60,
-
-    "suggest.noselect": false,
-    "suggest.enablePreselect": true,
+    "suggest.noselect": true,
+    "suggest.enablePreselect": false,
     "suggest.triggerAfterInsertEnter": false,
     "suggest.timeout": 5000,
     "suggest.enablePreview": true,
@@ -128,7 +127,7 @@
     "diagnostic.warningSign": "\uf071",
     "diagnostic.infoSign": "\uf129",
     "diagnostic.hintSign": "\uf864",
-    "diagnostic.displayByAle": true,
+    "diagnostic.displayByAle": false,
     "diagnostic.refreshOnInsertMode": false,
     "diagnostic.refreshAfterSave": false,
     "diagnostic.checkCurrentLine": true,
@@ -153,16 +152,6 @@
     "typescript.format.enabled": true,
     "explorer.width": 38,
     "explorer.quitOnOpen": true,
-    "explorer.sources": [
-        {
-            "name": "buffer",
-            "expand": false
-        },
-        {
-            "name": "file",
-            "expand": true
-        }
-    ],
     "explorer.file.column.indent.indentLine": true,
     "explorer.file.showHiddenFiles": false,
     "explorer.icon.enableNerdfont": true,
