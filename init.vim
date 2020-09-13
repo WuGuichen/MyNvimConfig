@@ -107,29 +107,29 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 set tw=0
 set foldmethod=indent
 
-"##### auto fcitx  ###########
-let g:input_toggle = 1
-function! Fcitx2en()
-   let s:input_status = system("fcitx5-remote")
-   if s:input_status == 2
-      let g:input_toggle = 1
-      let l:a = system("fcitx5-remote -c")
-   endif
-endfunction
-
-function! Fcitx2zh()
-   let s:input_status = system("fcitx5-remote")
-   if s:input_status != 2 && g:input_toggle == 1
-      let l:a = system("fcitx5-remote -o")
-      let g:input_toggle = 0
-   endif
-endfunction
-
-"退出插入模式
-autocmd InsertLeave * call Fcitx2en()
-"进入插入模式
-autocmd InsertEnter * call Fcitx2zh()
-"##### auto fcitx end ######
+" "##### auto fcitx  ###########
+" let g:input_toggle = 1
+" function! Fcitx2en()
+"    let s:input_status = system("fcitx5-remote")
+"    if s:input_status == 2
+"       let g:input_toggle = 1
+"       let l:a = system("fcitx5-remote -c")
+"    endif
+" endfunction
+"
+" function! Fcitx2zh()
+"    let s:input_status = system("fcitx5-remote")
+"    if s:input_status != 2 && g:input_toggle == 1
+"       let l:a = system("fcitx5-remote -o")
+"       let g:input_toggle = 0
+"    endif
+" endfunction
+"
+" "退出插入模式
+" autocmd InsertLeave * call Fcitx2en()
+" "进入插入模式
+" autocmd InsertEnter * call Fcitx2zh()
+" "##### auto fcitx end ######
 let mapleader = " "
 
 
@@ -148,6 +148,7 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+map zi <esc>viw<c-j>
 map s <nop>
 map sq :q!<CR>
 map S :w<CR>
@@ -181,7 +182,7 @@ imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
 
-imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
+" imap ,, <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 " imap ，， <Esc>:!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>a
 " nmap ,, :!sh ~/.config/nvim/xdotoolFiles/play.sh<CR><CR>
 
@@ -566,7 +567,8 @@ au Syntax * RainbowParenthesesLoadBraces
 
 "自动保存
 let g:auto_save = 1
-let g:auto_save_events = ["InsertLeave", "TextChanged", "TextChangedI", "CompleteDone"]
+let g:auto_save_events = ["CursorHold"]
+let g:auto_save_silent = 1  " do not display the auto-save notification
 " autocmd TextChanged,TextChangedI <buffer> silent write
 
 " ######### LaTeX ##########
@@ -629,7 +631,6 @@ let g:mkdp_delay_start_browser = 800
 " "UltiSnips 设置tab键为触发键
 "
 
-" let g:UltiSnipsExpandTrigger="<c-j>"
 " let g:UltiSnipsJumpForwardTrigger="<c-j>"
 " let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
@@ -800,9 +801,6 @@ vnoremap <silent><nowait> <space>br c<b><font color=#FF0000 size=4></font></b><E
 :nmap st :CocCommand explorer --width 30<CR>
 
 
-" List all presets
-nmap <space>il :CocList explPresets
-
 " ######### coc-snippets ##########
 
 " Use <C-l> for trigger snippet expand.
@@ -872,7 +870,7 @@ endfunction
 " let g:coc_snippet_next = '<C-j>'
 " Use <c-space> to trigger completion.
 
-inoremap <silent><expr> zi coc#refresh()
+inoremap <silent><expr> <c-h> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
@@ -880,7 +878,7 @@ inoremap <silent><expr> zi coc#refresh()
 if exists('*complete_info')
   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 else
-  " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 " inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
@@ -1241,3 +1239,4 @@ let g:lightline = {}
 let g:lightline.colorscheme = 'neodark'
 let g:neodark#terminal_transparent = 1
 
+let g:UltiSnipsExpandTrigger="<C-j>"
