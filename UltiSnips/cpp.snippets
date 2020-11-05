@@ -33,12 +33,18 @@ snippet !""!
 printf("${1:%s}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
 endsnippet
 
-snippet t "tt " i
+snippet t "tt " bi
 <tag>${VISUAL:inside text/should/is/g}</tag>
 endsnippet
 
+snippet for "for in " bi
+for (int i = 0; i < ${1:count}; i++) {
+    $0
+}
+endsnippet
+
 snippet today
-Today is `#!/usr/bin/perl
+Today is `#!/usr/bin/perl`
 @a = localtime(); print $a[3] . '.' . $a[4] . '.' . ($a[5]+1900);`.
 endsnippet
 

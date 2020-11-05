@@ -172,8 +172,8 @@ map sc byw
 map sp bcw<ESC>"0p
 map sP bcw<ESC>+0p
 
-map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
-imap jj <Esc>/<++><CR>:nohlsearch<CR>c4l
+map <silent> <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
+inoremap <nowait><silent> jj <Esc>/<++><CR>:nohlsearch<CR>c4l
 
 " 寻找两个相等的单词
 " map <LEADER>fd /\(\<\w\+\>\)\_s*\1
@@ -220,7 +220,11 @@ vnoremap <LEADER>y "+y
 "将系统剪贴板内容粘贴到vim
 " nmap <LEADER>p "+p"
 
+map <LEADER>ii v?pasca<cr>j<ESC>:call Inc()<cr><space><cr>
 
+func Inc()
+    '<,'>s/^/\=printf("%-4d", line(".")-line("'<")+1)
+endfunc
 
 """""新文件标题""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " add header comments for .h .c .hpp .cpp .mk .sh new file
@@ -792,6 +796,7 @@ nmap <Leader>bt <Plug>(coc-bookmark-toggle)
 nmap <Leader>ba <Plug>(coc-bookmark-annotate)
 vnoremap <silent><nowait> <space>bb c****<ESC>hhp
 vnoremap <silent><nowait> <space>br c<b><font color=#FF0000 size=4></font></b><ESC>F4lp
+noremap <silent><nowait> <space>bk <ESC>$v^c<b><i><font color=#6495ED size=4></font></i></b><ESC>F4lp
 
 
 
@@ -1042,7 +1047,7 @@ func! CompileBuildGcc()
     if expand("%:e") == 'cpp'
         exec "AsyncTask file-build"
     elseif expand("%:e") == 'md'
-        exec "CocDisable"
+        exec "CocEnable"
     endif
 endfunc
 
@@ -1239,4 +1244,4 @@ let g:lightline = {}
 let g:lightline.colorscheme = 'neodark'
 let g:neodark#terminal_transparent = 1
 
-let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsExpandTrigger="<C-l>"

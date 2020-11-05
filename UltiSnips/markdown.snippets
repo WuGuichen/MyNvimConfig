@@ -271,24 +271,23 @@ endsnippet
 
 context "math()"
 snippet fr "Fraction" iw
-\\frac{${VISUAL}}{$1}$0
+\\frac{$0}{<++>}<++>
 endsnippet
 
 context "math()"
 snippet / "Fraction" iA
-\\frac{${VISUAL}}{$1}$0
+\\frac{${VISUAL}}{$0}<++>
 endsnippet
 
 context "math()"
-snippet tag "Tag" 
+snippet tag "tag" A
 \tag{$0}
-<++>
 endsnippet
 
 context "math()"
 priority 1000
 snippet '((\d+)|(\d*)(\\)?([A-Za-z]+)((\^|_)(\{\d+\}|\d))*)/' "Fraction" wrA
-\\frac{`!p snip.rv = match.group(1)`}{$1}$0
+\\frac{`!p snip.rv = match.group(1)`}{$0}<++>
 endsnippet
 
 context "math()"
@@ -351,6 +350,31 @@ snippet rd "to the ... power"  i
 <sup>$0</sup><++>
 endsnippet
 
+context "nomath()"
+snippet ita "italic"  i
+<font color=#00FF00 size=3>*${VISUAL}*</font>
+endsnippet
+
+context "nomath()"
+snippet cite "italic"  iw
+> <font color=#00FF00 size=3>${VISUAL}</font>
+endsnippet
+
+priority 100
+context "nomath()"
+snippet br "</br>"  i
+</br>
+$0
+endsnippet
+
+priority 1000
+context "nomath()"
+snippet bbr "double</br>"  bA
+</br>
+</br>
+$0
+endsnippet
+
 context "math()"
 snippet rd "to the ... power" Ai
 ^{$0}<++>
@@ -365,12 +389,18 @@ priority 100
 context "math()"
 snippet ^^ "upper" Ai
 ^{$1}$0
+endsnippet
+
+priority 100
+context "math()"
+snippet ** "^*" Ai
+^*$0
+endsnippet
 
 context "math()"
 snippet ,p "partial" Ai
 \partial 
 endsnippet
-
 
 context "math()"
 snippet ,m "mathrm{d}" Ai
@@ -378,7 +408,7 @@ snippet ,m "mathrm{d}" Ai
 endsnippet
 
 context "math()"
-snippet ooo "\infty" Ai
+snippet oo "\infty" i
 \infty
 endsnippet
 
@@ -418,7 +448,7 @@ snippet AA "forall"
 endsnippet
 
 context "math()"
-snippet epl "epsilon" Ai
+snippet eps "epsilon" Ai
 \epsilon
 endsnippet
 
@@ -443,14 +473,24 @@ endsnippet
 
 priority 100
 context "math()"
-snippet '(?<!\\)(cdot|sin|tan|cos|arccot|cot|csc|ln|log|exp|star|perp)' "ln" rwA
+snippet '(?<!\\)(cdot|sin|tan|cos|arccot|cot|csc|ln|exp|star|perp)' "ln" rwA
 \\`!p snip.rv = match.group(1)` 
+endsnippet
+
+context "math()"
+snippet log "log_{}" Ai
+\log_{$0}<++>
+endsnippet
+
+context "math()"
+snippet lgg "lg" iA
+\lg $0
 endsnippet
 
 priority 300
 context "math()"
 snippet dint "integral" wA
-\int_{${1:-\infty}}^{${2:\infty}} ${3:${VISUAL}} $0
+\int_{${1:-\infty}}^{${2:\infty}} ${3:${VISUAL}}$0
 endsnippet
 
 priority 200
@@ -465,10 +505,20 @@ snippet -> "to" iA
 \to 
 endsnippet
 
+context "math()"
+snippet dots "cdots" iA
+\cdots 
+endsnippet
+
 priority 200
 context "math()"
 snippet lrar "leftrightarrow" 
 \leftrightarrow
+endsnippet
+
+context "math()"
+snippet rar "rightarrow" Ai
+\Rightarrow
 endsnippet
 
 context "math()"
@@ -587,6 +637,28 @@ snippet uuu "bigcup" Ai
 endsnippet
 
 context "nomath()"
+snippet bbb "a box" wA
+<style>div.bbb{background-color:WhiteSmoke;padding:10px 10px;text-indent:10px;border-width:0px;border-color:grey;}</style>
+<div class="bbb"><font size="3">
+
+$0
+
+</div></font></br>
+
+<++>
+endsnippet
+
+context "nomath()"
+snippet aaa "a 4# title" wA
+#### $0
+
+<++>
+
+</br>
+
+<++>
+endsnippet
+context "nomath()"
 snippet nnn "bigcup" Ai
 &bigcap;$0
 endsnippet
@@ -640,9 +712,8 @@ endsnippet
 context "math()"
 snippet case "cases" wA
 \begin{cases}
-	$1
+	$0
 \end{cases}
-<++>
 endsnippet
 
 context "math()"
@@ -663,7 +734,7 @@ endsnippet
 
 priority 100
 context "math()"
-snippet "([a-zA-Z])bar" "bar" r
+snippet "([a-zA-Z]).bar" "bar" r
 \overline{`!p snip.rv=match.group(1)`}
 endsnippet
 
@@ -673,9 +744,19 @@ snippet "hat" "hat" r
 \hat{$1}$0
 endsnippet
 
+context "math()"
+snippet hatb "hat and \bf" Ai
+\hat{\textbf $0}<++>
+endsnippet
+
+context "math()"
+snippet bf "\textbf" Ai
+\textbf{$0}<++>
+endsnippet
+
 priority 100
 context "math()"
-snippet "([a-zA-Z])hat" "hat" r
+snippet "([a-zA-Z]).hat" "hat" r
 \hat{`!p snip.rv=match.group(1)`}
 endsnippet
 
@@ -696,7 +777,7 @@ endsnippet
 
 context "math()"
 snippet ceil "ceil" Ai
-\left\lceil $1 \right\rceil $0
+\left\lceil $0 \right\rceil <++>
 endsnippet
 
 context "nomath()"
@@ -711,7 +792,7 @@ endsnippet
 
 context "nomath()"
 snippet floor "floor" Ai
-⌊$0⌋$0
+⌊$0⌋<++>
 endsnippet
 
 snippet pmat "pmat" 
@@ -738,8 +819,8 @@ snippet conj "conjugate"
 \overline{$1}$0
 endsnippet
 
-snippet sum "sum" w
-\sum_{n=${1:1}}^{${2:\infty}} ${3:a_n z^n}
+snippet sum "sum" i
+\sum_{${1:n=1}}^{<++>}<++>
 endsnippet
 
 context "math()"
@@ -794,12 +875,17 @@ endsnippet
 
 context "math()"
 snippet ,z "_{}" Ai
-_{${1:x}}${0}
+_{${0}}<++>
 endsnippet
 
 context "nomath()"
 snippet ,z "_{}" i
-<sub>${1:x}</sub><++>
+<sub>${0}</sub><++>
+endsnippet
+
+context "nomath()"
+snippet ,b "****" iA
+**$0**<++>
 endsnippet
 
 context "math()"
@@ -829,7 +915,7 @@ endsnippet
 
 priority 100
 context "math()"
-snippet '(?<!\\)(alpha|beta|psi|Psi|gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|Theta|vartheta|mu|nu|xi|pi|rho|sigma|tau|phi|Phi|varphi|omega|Omega|chi)' "greece" rwA
+snippet '(?<!\\)(alpha|beta|psi|Psi|gamma|delta|Delta|epsilon|varepsilon|zeta|eta|quad|theta|Theta|vartheta|mu|nu|xi|pi|rho|sigma|tau|phi|Phi|varphi|omega|Omega|chi)' "greece" rwA
 \\`!p snip.rv = match.group(1)`
 endsnippet
 
@@ -873,7 +959,7 @@ endsnippet
 ##############
 snippet title "title"
 <head><style>div.solid {border-style:solid;}</style></head>
-<b><font size="4">$1</font></b>
+<b><font size="4">${1:${VISUAL}}</font></b>
 
 ------
 
@@ -885,8 +971,13 @@ snippet newpage "New Page"
 $0
 endsnippet
 
-snippet sp
+snippet sp "" i
 &emsp;
+endsnippet
+
+context "math()"
+snippet hence "因此" Ai
+因此，
 endsnippet
 
 # context "nomath()"
@@ -938,8 +1029,14 @@ snippet msp "4 space" w
 endsnippet
 
 context "math()"
-snippet qu "4 space" w
+snippet sss "4 space" iA
 \quad 
+endsnippet
+
+priority 1000
+context "math()"
+snippet qqq "8 space" iA
+\qquad 
 endsnippet
 
 snippet deg "degree" w
@@ -966,16 +1063,22 @@ snippet lrg "<>" iAw
 \left\langle $0\right \rangle<++>
 endsnippet
 
+context "math()"
 snippet lrb "left\{ right\}" iA
-\\{$1\\}$0
+\\{$0\\}<++>
 endsnippet
 
-snippet lre "left[ right]" iAw
-[$1]$0
+context "nomath()"
+snippet lrb "left\{ right\}" iA
+\{$0\}<++>
+endsnippet
+
+snippet lre "left[ right]" iA
+[$0]<++>
 endsnippet
 
 context "math()"
-snippet lrl "left| right|" iAw
+snippet lrl "left| right|" iA
 |$0|<++>
 endsnippet
 
@@ -996,12 +1099,18 @@ snip.rv=out
 endsnippet
 
 snippet box "box" w
-<style>div.${1:dashed}{background-color:#FFF9F9;padding:15px 20px;text-indent:30px;border-style:${1:dashed};border-width:1px;border-color:grey;}</style>
-<div class="${1:dashed}"></br>
+<style>div.${1:dashed}{background-color:#FFF9F9;padding:10px 10px;text-indent:10px;border-style:${1:dashed};border-width:1px;border-color:grey;}</style>
+<div class="${1:dashed}"></div></br>
+$0
+endsnippet
+
+snippet abox "answer box" w
+<style>div.${1:name}{padding:5px 10px;text-indent:10px;border-style:dashed;border-width:1px;border-color:grey;}</style>
+<div class="${1:name}">
 
 $2
 
-</div>
+</div></br>
 $0
 endsnippet
 
@@ -1053,8 +1162,12 @@ snippet noteas "note as Nn" b
 note "<++>" as N${1:1}
 endsnippet
 
-snippet center "Center" b
-<center><font size=3></font></center>
+snippet center "Center" i
+<center><font>${1:${VISUAL}}</font></center>
+endsnippet
+
+snippet right "Right" i
+<p align="right">${1:${VISUAL}}</p>
 endsnippet
 
 snippet style "Style" b
@@ -1072,10 +1185,14 @@ snippet fred "Description" i
 <b><font color=#FF0000 size=4>$1</font></b>$0
 endsnippet
 
-snippet pascal "Pascal Block" bi
-```pascal
+snippet bb "Description" i
+<b><font color=#000000 size=4>$1</font></b>$0
+endsnippet
+
+snippet pas "Pascal Block" bi
+\`\`\`pascal
 $0
-```
+\`\`\`
 endsnippet
 
 snippet dddd "2020-09-13" b
@@ -1113,3 +1230,9 @@ endsnippet
 snippet dbg "if (DEVELOPMENT) dbg" "re.match('^if \(DEVELOPMENT\) \{', snip.buffer[snip.line-1])" be
 debugger;
 endsnippet
+
+snippet la "left arrow" wi
+←
+endsnippet
+
+
