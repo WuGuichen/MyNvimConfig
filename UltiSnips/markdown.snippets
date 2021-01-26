@@ -139,8 +139,8 @@ snippet fnt "Footnote"
 [^$1]:${2:Text}
 endsnippet
 
-snippet detail "Disclosure"
-<details${3: open=""}>
+snippet details "Disclosure"
+<details${3}>
   ${1:<summary>${2}</summary>}$0
 </details>
 endsnippet
@@ -607,7 +607,7 @@ snippet notin "not in "
 endsnippet
 
 context "math()"
-snippet inn "in " 
+snippet inn "in " A
 \in 
 endsnippet
 
@@ -641,7 +641,7 @@ snippet bbb "a box" wA
 <style>div.bbb{background-color:WhiteSmoke;padding:10px 10px;text-indent:10px;border-width:0px;border-color:grey;}</style>
 <div class="bbb"><font size="3">
 
-$0
+${1:${VISUAL}}
 
 </div></font></br>
 
@@ -754,6 +754,11 @@ snippet bf "\textbf" Ai
 \textbf{$0}<++>
 endsnippet
 
+context "math()"
+snippet hua "\textbf" Ai
+\mathcal{$0}<++>
+endsnippet
+
 priority 100
 context "math()"
 snippet "([a-zA-Z]).hat" "hat" r
@@ -771,7 +776,7 @@ snippet DD "D"
 endsnippet
 
 context "math()"
-snippet != "unequals" 
+snippet != "unequals" Ai
 \neq 
 endsnippet
 
@@ -1083,6 +1088,22 @@ snippet lrl "left| right|" iA
 endsnippet
 
 snippet '(?<!\\)([0-9])([0-9])tb' "definele" ri
+$1`!p 
+x=match.group(1)
+y=match.group(2)
+row1=""
+row2="" 
+for i in range(int(x)):
+	row1+="|<++> "
+	row2+="|:-:"
+row1+="|\n"
+row2+="|\n"
+out=row1+row2+int(y)*row1
+snip.rv=out
+`$0
+endsnippet
+
+snippet '(?<!\\)([0-9][0-9]).([0-9][0-9]).tb' "definele" ri
 $1`!p 
 x=match.group(1)
 y=match.group(2)

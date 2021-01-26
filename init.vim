@@ -151,7 +151,8 @@ endif
 map zi <esc>viw<c-j>
 map s <nop>
 map sq :q!<CR>
-map S :w<CR>
+nmap S :w<CR>
+" vmap S 是vim-surround
 map R :source $MYVIMRC<CR>
 
 function! Refresh()
@@ -415,6 +416,7 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'junegunn/vim-peekaboo' " 双引号提示
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'mg979/vim-visual-multi'   " 多光标操作
 
 
 "====================
@@ -795,7 +797,7 @@ nmap <Leader>bh <Plug>(coc-bookmark-prev)
 nmap <Leader>bt <Plug>(coc-bookmark-toggle)
 nmap <Leader>ba <Plug>(coc-bookmark-annotate)
 vnoremap <silent><nowait> <space>bb c****<ESC>hhp
-vnoremap <silent><nowait> <space>br c<b><font color=#FF0000 size=4></font></b><ESC>F4lp
+vnoremap <silent><nowait> <space>br c<b><font color=#FF0000></font></b><ESC>11hp
 noremap <silent><nowait> <space>bk <ESC>$v^c<b><i><font color=#6495ED size=4></font></i></b><ESC>F4lp
 
 
@@ -1243,5 +1245,11 @@ let g:neodark#solid_vertsplit = 0
 let g:lightline = {}
 let g:lightline.colorscheme = 'neodark'
 let g:neodark#terminal_transparent = 1
+
+
+" ######### visual-multi ##########
+
+let g:VM_maps                       = {}
+
 
 let g:UltiSnipsExpandTrigger="<C-l>"
